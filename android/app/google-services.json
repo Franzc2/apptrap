@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "11500832178",
+    "firebase_url": "https://apptrab.firebaseio.com",
+    "project_id": "apptrab",
+    "storage_bucket": "apptrab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11500832178:android:523fc78c2cc10f50a750ab",
+        "android_client_info": {
+          "package_name": "apptrab.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "11500832178-d13cl1l14892ueg8kc3p7bklicdiff0h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "apptrab.com",
+            "certificate_hash": "2c123cc75f6456d82d62e602329fadb628278a51"
+          }
+        },
+        {
+          "client_id": "11500832178-s60t1peaisd48u5ek7e3e3u97psim261.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIDaZ27V84qloVODNsHfauxsgpqpp4Ts4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11500832178-s60t1peaisd48u5ek7e3e3u97psim261.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
