@@ -104,7 +104,6 @@ class _SearchPublicationsByCategoriesPageState extends State<SearchPublicationsB
                     ],
                     mainAxisAlignment: MainAxisAlignment.center,
                   ),
-
                 )
                     :_results==null
                     ?Center()
@@ -116,7 +115,6 @@ class _SearchPublicationsByCategoriesPageState extends State<SearchPublicationsB
                   itemCount: _results.length,
                   itemBuilder: (BuildContext ctx, int index) {
                     AlgoliaObjectSnapshot snap = _results[index];
-//                    final jsonAlgolia=json.decode(snap.);
                     PublicacionTrabajoAlgolia publicacion=PublicacionTrabajoAlgolia.fromJson(snap.data,snap.objectID);
                     return
 

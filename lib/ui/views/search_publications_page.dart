@@ -1,9 +1,12 @@
+import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/publicacionTrabajoModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:algolia/algolia.dart';
 import 'package:intl/intl.dart';
+
+import 'detalles_publicacion_trabajo_para_postulantes_page.dart';
 
 class SearchCategoriesPage extends StatefulWidget {
   SearchCategoriesPage({Key key}) : super(key: key);
@@ -97,7 +100,7 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
                   itemCount: _results.length,
                   itemBuilder: (BuildContext ctx, int index) {
                     AlgoliaObjectSnapshot snap = _results[index];
-//                    PublicacionTrabajo publicacion=PublicacionTrabajo.fromMap(snap.data, snap.objectID);
+                    PublicacionTrabajoAlgolia publicacion=PublicacionTrabajoAlgolia.fromJson(snap.data,snap.objectID);
                     return
                       Card(
                         child: InkWell(
@@ -131,6 +134,7 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
                             ),
                           ),
                           onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
 //                            Navigator.push(context, MaterialPageRoute(builder: (_)=>EditarPublicacionTrabajoPage(publicacionTrabajo: publicacionTrabajo ,)));
 //                            Navigator.push(context, MaterialPageRoute(builder: (_)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: snap.id,)));
                           },
