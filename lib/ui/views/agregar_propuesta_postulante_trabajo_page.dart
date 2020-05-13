@@ -223,6 +223,11 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
                                         idUserPostulante: infoUser.id,
                                         mensajeOpcional: mensajeCtrl.text,
                                         fechaCreacion: Timestamp.now(),
+                                        idUserPublicante: widget.publicacionTrabajoAlgolia.idUser,
+                                        idPublicacionTrabajoUserPublicante: widget.publicacionTrabajoAlgolia.id,
+                                        categoriaPublicacionTrabajo: widget.publicacionTrabajoAlgolia.nombreCategoria,
+                                        subCategoriaPublicacionTrabajo: widget.publicacionTrabajoAlgolia.nombreSubcategoria,
+                                        tituloPublicacionTrabajo: widget.publicacionTrabajoAlgolia.titulo,
                                       ),
                                       infoUser.id
                                   ).then((a){print("show");

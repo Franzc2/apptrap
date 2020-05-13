@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
         ListTile(
           leading: Icon(Icons.list),
           title: Text('Mis postulaciones'),
-          onTap: () {}
+          onTap: () {Navigator.pushNamed(context, '/misPostulaciones');}
         ),
         ListTile(
           leading: Icon(Icons.message),
@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
         ),
         ListTile(
           leading: Icon(Icons.note_add),
-          title: Text('Mis Publicaciones'),
+          title: Text('Mis publicaciones'),
           onTap: () => Navigator.pushNamed(context, '/misPublicaciones'),
         ),
         ListTile(

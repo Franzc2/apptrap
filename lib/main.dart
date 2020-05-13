@@ -1,6 +1,7 @@
 
 import 'package:app/locator.dart';
 import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/ui/views/mis_postulaciones_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
                   '/curriculumPage':(context)=>CurriculumPage(user: state.user,),
                   '/homePage': (context)=>HomePage(),
                   '/misPublicaciones': (context)=>MisPublicacionesPage(),
+                  '/misPostulaciones': (context)=>MisPostulacionesPage(),
                 },
               );
             }

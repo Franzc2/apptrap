@@ -23,6 +23,7 @@ class crudModel extends ChangeNotifier{
   List<Categoria> categorias;
   List<PublicacionTrabajoUser> publicacionesUser;
   List<PropuestaPostulante> propuestasPostulantes;
+  List<PropuestaPostulante> postulaciones;
 
   Future<List<User>> fetchUsers() async{
     var result = await _api.getDataCollection();
@@ -182,6 +183,14 @@ class crudModel extends ChangeNotifier{
         .map((doc) => PropuestaPostulante.fromMap(doc.data, doc.documentID))
         .toList();
     return propuestasPostulantes;
+  }
+
+  Future<List<PropuestaPostulante>> getPostulaciones(String idDocUserCollection)async{
+    var result= await _api.getDataSubCollection(idDocUserCollection, 'postulaciones',).catchError((e)=>print(e));
+    postulaciones=result.documents
+        .map((doc) => PropuestaPostulante.fromMap(doc.data, doc.documentID))
+        .toList();
+    return postulaciones;
   }
 
 // ---------------------------------------------------------------------------------------------------------------------------------

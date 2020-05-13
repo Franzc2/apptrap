@@ -148,9 +148,7 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
                             ),
                           ),
                           onTap: (){
-                            this._scaffoldKey.currentState.showBottomSheet((context)=>_buildBottomSheet(context, infoUser.id, publicacionTrabajo.id)).closed.whenComplete((){
-                              Navigator.of(context).pop();
-                            });
+                            this._scaffoldKey.currentState.showBottomSheet((context)=>_buildBottomSheet(context, infoUser.id, publicacionTrabajo.id));
 //                              Navigator.push(context, MaterialPageRoute(builder: (_)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: publicacionTrabajo.id,)));
                           },
                         ),
@@ -250,8 +248,8 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
             leading: Icon(Icons.remove_red_eye,color: Colors.amber,),
             title: Text("Ver detalles publicación"),
             onTap: (){
+              Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(builder: (context)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: idPublicacionTrabajo,)));
-//            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: idPublicacionTrabajo)));
             },
           ),
           Divider(height: 1.0,),
