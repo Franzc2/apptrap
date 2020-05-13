@@ -27,7 +27,8 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
 
 //  var format = DateFormat.yMMMMEEEEd('es');
   var format = DateFormat.yMd('es').add_jm();
-//  yMd().add_jm()
+  final GlobalKey<ScaffoldState> _scaffoldKey=GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +46,7 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
 
     // TODO: implement build
     return Scaffold(
+      key: this._scaffoldKey,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(63, 81, 181, 1.0),
         title: Text('Mis Publicaciones'),
@@ -71,7 +73,7 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
         color: Color.fromRGBO(189, 189, 189, 0.1),
         child: FutureBuilder(
           future: _crud.getPublicacionesUser(infoUser.id),
-          builder: ( _ ,  publicacionesSnap ){
+          builder: ( context ,  publicacionesSnap ){
             if(publicacionesSnap.connectionState==ConnectionState.waiting){
               return Center(
                 child: CircularProgressIndicator(),
@@ -125,13 +127,31 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
                                       ],
                                     )
                                 ),
+                                Divider(),
+                                FutureBuilder(
+                                  future: _crud.getPropuestasPostulantesTrabajo(infoUser.id, publicacionTrabajo.id),
+                                  builder: (_, propuestaPostulantesSnap){
+                                    if(propuestaPostulantesSnap.connectionState==ConnectionState.waiting){
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    else{
+                                      return Center(
+                                        child: Text("Número de postulaciones: "+ propuestaPostulantesSnap.data.length.toString()),
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                               mainAxisAlignment: MainAxisAlignment.start,
                             ),
                           ),
                           onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (_)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: publicacionTrabajo.id,)));
-
+                            this._scaffoldKey.currentState.showBottomSheet((context)=>_buildBottomSheet(context, infoUser.id, publicacionTrabajo.id)).closed.whenComplete((){
+                              Navigator.of(context).pop();
+                            });
+//                              Navigator.push(context, MaterialPageRoute(builder: (_)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: publicacionTrabajo.id,)));
                           },
                         ),
                       );
@@ -184,7 +204,6 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
     }
   }
 
-
   Widget buildCardPublicacion(BuildContext context,PublicacionTrabajoUser publicacion){
     return Card(
       child: ListTile(
@@ -197,6 +216,68 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
         },
       ),
     );
+  }
+  
+  Container _buildBottomSheet(BuildContext context, String idUser,String idPublicacionTrabajo){
+    return Container(
+      height: 160,
+      padding: EdgeInsets.only(top: 30.0,left: 8.0,right: 8.0),
+      decoration: BoxDecoration(
+//        border: Border(
+//          top: BorderSide(
+//            width: 2.0,
+//            color: Colors.black54
+//          ),
+//          right: BorderSide(
+//              width: 2.0,
+//              color: Colors.black54
+//          ),
+//          left: BorderSide(
+//              width: 2.0,
+//              color: Colors.black54
+//          ),
+//          bottom: BorderSide(
+//              width: 2.0,
+//              color: Colors.black54
+//          ),
+//        ),
+//        borderRadius: BorderRadius.circular(8.0)
+      ),
+      child: ListView(
+        children: <Widget>[
+          Divider(height: 1.0,),
+          ListTile(
+            leading: Icon(Icons.remove_red_eye,color: Colors.amber,),
+            title: Text("Ver detalles publicación"),
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: idPublicacionTrabajo,)));
+//            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: idPublicacionTrabajo)));
+            },
+          ),
+          Divider(height: 1.0,),
+          ListTile(
+            leading: Icon(Icons.people, color: Colors.green,),
+            title: Text("Ver propuestas postulantes"),
+          ),
+          Divider(height: 1.0,),
+//          Container(
+////            alignment: Alignment.center,
+//            child: RaisedButton.icon(
+//                onPressed: (){},
+//                icon: Icon(Icons.remove_red_eye) ,
+//                label: Text("Ver detalles publicación")),
+//          ),
+//          Container(
+//            alignment: Alignment.center,
+//            child: RaisedButton.icon(
+//                onPressed: (){},
+//                icon: Icon(Icons.people) ,
+//                label: Text("Ver propuestas postulantes")),
+//          )
+        ],
+      ),
+    );
+    
   }
 
 

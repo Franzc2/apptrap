@@ -1,33 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Postulante{
+class PropuestaPostulante{
   String id;
   String idUserPostulante;
   num contraOfertaPresupuesto;
   String mensajeOpcional;
   String estadoPostulacion;
+  Timestamp fechaCreacion;
 
-  Postulante({
+  PropuestaPostulante({
     this.id,
     this.idUserPostulante,
     this.contraOfertaPresupuesto,
     this.mensajeOpcional,
-    this.estadoPostulacion
+    this.estadoPostulacion,
+    this.fechaCreacion
 });
 
-  Postulante.fromMap(Map snapshot, String id):
+  PropuestaPostulante.fromMap(Map snapshot, String id):
       id=id ?? '',
   idUserPostulante=snapshot['idUserPostulante'] ?? '',
   contraOfertaPresupuesto=snapshot['contraOfertaPresupuesto'] ?? 0,
   mensajeOpcional=snapshot['mensajeOpcional'] ?? '',
-  estadoPostulacion=snapshot['estadoPostulacion'] ?? '';
+  estadoPostulacion=snapshot['estadoPostulacion'] ?? '',
+  fechaCreacion= snapshot['fechaCreacion'] ?? null;
 
   toJson(){
     return{
       "idUserPostulante": idUserPostulante,
       "contraOfertaPresupuesto": contraOfertaPresupuesto,
       "mensajeOpcional": mensajeOpcional,
-      "estadoPostulacion": estadoPostulacion
+      "estadoPostulacion": estadoPostulacion,
+      "fechaCreacion": fechaCreacion,
     };
   }
 

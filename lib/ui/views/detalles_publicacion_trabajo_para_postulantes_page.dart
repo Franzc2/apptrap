@@ -4,6 +4,8 @@ import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/publicacionTrabajoModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/crudModel.dart';
+import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/ui/views/agregar_propuesta_postulante_trabajo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,7 @@ class DetallesPublicacionTrabajoParaPostulantesPage extends StatefulWidget {
 }
 
 class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<DetallesPublicacionTrabajoParaPostulantesPage> {
+  GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey();
   var _formatPublicacion = DateFormat.yMMMd('es').add_jm();
 
   @override
@@ -35,18 +38,42 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
   @override
   Widget build(BuildContext context) {
     final _crud= Provider.of<crudModel>(context);
+    final User infoUser=Provider.of<LoginState>(context).infoUser();
     // TODO: implement build
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(63, 81, 181, 1.0),
         title: Text(widget.publicacionTrabajoAlgolia.titulo),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){},
+
+        onPressed: (){
+          if(infoUser!=null){
+            if(infoUser.id==widget.publicacionTrabajoAlgolia.idUser){
+              _scaffoldKey.currentState.showSnackBar(
+                  SnackBar(
+                    duration: Duration(milliseconds: 2000),
+                    elevation: 6.0,
+                    behavior: SnackBarBehavior.floating,
+                    content: Row(
+                      children: <Widget>[
+                        Icon(Icons.error),
+                        SizedBox(width: 20.0,),
+                        Expanded(child: Text("Usted publico este trabajo."),)
+                      ],
+                    ),
+                  )
+              );
+            }
+            else{
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgregarPropuestaPostulanteTrabajoPage(publicacionTrabajoAlgolia: widget.publicacionTrabajoAlgolia,)));
+            }
+          }
+        },
         label: Text("Enviar propuesta"),
         icon: Icon(Icons.send),
         backgroundColor: Color.fromRGBO(255, 193, 7, 1),
-
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Container(
@@ -128,11 +155,7 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                             padding: const EdgeInsets.all(10.0),
                             child: Column(
                               children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(),
-                                  child: Text("DETALLES",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo),),
-                                ),
-                                SizedBox(height: 1.0,),
+                                Text("DETALLES",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo),),
                                 Center(
                                   child: Text(widget.publicacionTrabajoAlgolia.nombreSubcategoria,style: TextStyle(fontSize: 16,color: Colors.blueGrey,fontWeight: FontWeight.bold),),
                                 ),

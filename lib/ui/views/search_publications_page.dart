@@ -135,8 +135,7 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
                           ),
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
-//                            Navigator.push(context, MaterialPageRoute(builder: (_)=>EditarPublicacionTrabajoPage(publicacionTrabajo: publicacionTrabajo ,)));
-//                            Navigator.push(context, MaterialPageRoute(builder: (_)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: snap.id,)));
+
                           },
                         ),
 //                        shape: RoundedRectangleBorder(

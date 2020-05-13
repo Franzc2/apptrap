@@ -227,6 +227,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                             estadoCuenta: widget.user.estadoCuenta,
                             habilidades: widget.user.habilidades,
                             nameDocCurriculum: widget.user.nameDocCurriculum,
+                            token:""
                           ),
                           widget.user.id
                       );

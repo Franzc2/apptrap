@@ -54,6 +54,9 @@ class ApiUser{
   Future<DocumentReference> addDocumentInSubCollection(String idDocCollection, String nameSubCollection, Map data) {
     return ref.document(idDocCollection).collection(nameSubCollection).add(data);
   }
+  Future<void> addDocumentInSubCollectionWithID(String idDocCollection, String nameSubCollection, Map data,String id) {
+    return ref.document(idDocCollection).collection(nameSubCollection).document(id).setData(data);
+  }
   Future<void> updateDocumentInSubCollection(String idDocCollection, String nameSubCollection , String idDocSubCollection,Map data ) {
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).updateData(data) ;
   }
@@ -64,7 +67,7 @@ class ApiUser{
   //esta funcion es solo para publicaciones de usuarios que a la vez insertan en otra coleccion llamada "publicaciones"
   Future<void> addDocumentInSubCollectionPublication(String idDocCollection, String nameSubCollection, Map data) {
     DocumentReference refDocumentPublicacionUser=ref.document(idDocCollection).collection(nameSubCollection).document();
-    String idPublicacionUser=refDocumentPublicacionUser.documentID+Timestamp.now().nanoseconds.toString();
+    String idPublicacionUser=refDocumentPublicacionUser.documentID+Timestamp.now().millisecondsSinceEpoch.toString();
     data['idUser']=idDocCollection;
     _apiPublicaconTrabajo.addDocumentPublicacion(data, idPublicacionUser);
     return ref.document(idDocCollection).collection(nameSubCollection).document(idPublicacionUser).setData(data);
@@ -80,6 +83,12 @@ class ApiUser{
     _apiPublicaconTrabajo.removeDocumentPublicacion(idDocSubCollection);
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).delete();
   }
+
+
+  Future<QuerySnapshot> getDataSubCollection2(String idDocCollection, String nameSubCollection,String idDocSubCollection,String nameSubCollection2) {
+    return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).collection(nameSubCollection2).orderBy('fechaCreacion',descending: true).getDocuments() ;
+  }
+
 // ---------------------------------------------------------------------------------------------------------------------------------
   Future<DocumentReference> addDocumentInSubCollection2(
       String idDocCollection,
@@ -93,6 +102,29 @@ class ApiUser{
         .document(idDocSubCollection)
         .collection(nameSubCollection2)
         .add(data);
+  }
+// ---------------------------------------------------------------------------------------------------------------------------------
+  Future<void> addDocumentInSubCollection2PropuestaPostulante(
+      String idDocCollection, //id User
+      String nameSubCollection, // publicaciones_trabajos
+      String idDocSubCollection, // id Publicacion
+      String nameSubCollection2, // propuestas_postulantes
+      Map data, // propuesta postulante model,
+      String idUserPostulante
+      ) {
+
+    DocumentReference refDocumentPropuestaPostulante=ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).collection(nameSubCollection2).document();
+    String idPropuestaPostulante=refDocumentPropuestaPostulante.documentID+Timestamp.now().millisecondsSinceEpoch.toString();
+
+    addDocumentInSubCollectionWithID(idUserPostulante, "postulaciones", data, idPropuestaPostulante);
+
+    return
+      ref.document(idDocCollection)
+          .collection(nameSubCollection)
+          .document(idDocSubCollection)
+          .collection(nameSubCollection2)
+          .document(idPropuestaPostulante)
+          .setData(data);
   }
 // ---------------------------------------------------------------------------------------------------------------------------------
   Future<void> updateDocumentInSubCollection2(

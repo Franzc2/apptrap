@@ -108,6 +108,7 @@ class LoginState with ChangeNotifier{
     user.ciudadRecidencia='';
     user.numCI='';
     user.nameDocCurriculum="";
+    user.token="";
 
     _expProfUser=[];
     _formacionUser=[];

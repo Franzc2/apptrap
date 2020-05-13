@@ -15,6 +15,8 @@ class User{
   String urlDocumentCurriculum;
   String estadoCuenta;
   String nameDocCurriculum;
+  String token;
+
 
 
   User({
@@ -30,7 +32,8 @@ class User{
     this.idiomas,
     this.urlDocumentCurriculum,
     this.estadoCuenta,
-    this.nameDocCurriculum
+    this.nameDocCurriculum,
+    this.token
   });
 
   User.fromMap(Map snapshot, String id):
@@ -46,7 +49,8 @@ class User{
       idiomas=List.from(snapshot['idiomas'] ?? []),
       urlDocumentCurriculum=snapshot['urlDocumentCurriculum'] ?? '',
       estadoCuenta=snapshot['estadoCuenta'] ?? '',
-      nameDocCurriculum=snapshot['nameDocCurriculum'] ?? '';
+      nameDocCurriculum=snapshot['nameDocCurriculum'] ?? '',
+      token=snapshot['token'] ?? '';
 
 
   toJson() {
@@ -62,7 +66,8 @@ class User{
     "idiomas": idiomas,
     "urlDocumentCurriculum": urlDocumentCurriculum,
     "estadoCuenta": estadoCuenta,
-    "nameDocCurriculum": nameDocCurriculum
+    "nameDocCurriculum": nameDocCurriculum,
+    "token": token
     };
   }
 }

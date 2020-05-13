@@ -63,8 +63,8 @@ class _AgregarPublicacionTrabajoPageState extends State<AgregarPublicacionTrabaj
               listTitleCategoria("Legal", Icon(FontAwesomeIcons.balanceScale)),
               listTitleCategoria("Finanzas y negocios",Icon(Icons.assessment),),
               listTitleCategoria("Ingeniería y arquitectura", Icon(FontAwesomeIcons.tools)),
-              listTitleCategoria("Trabajos Universitarios", Icon(FontAwesomeIcons.book)),
-              listTitleCategoria("Trabajos Manuales", Icon(FontAwesomeIcons.tools))
+              listTitleCategoria("Trabajos universitarios", Icon(FontAwesomeIcons.book)),
+              listTitleCategoria("Trabajos manuales", Icon(FontAwesomeIcons.tools))
             ],
           )
       ),
@@ -206,8 +206,8 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
             backgroundColor: Color.fromRGBO(63, 81, 181, 1.0),
 
           ),
-          body:Form(
-            key: keyForm,
+          body:Form(            key: keyForm,
+
             child: ListView(
               children: <Widget>[
                 Padding(

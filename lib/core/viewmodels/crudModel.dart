@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:app/core/models/categoriaPublicacionModel.dart';
+import 'package:app/core/models/propuestaPostulanteModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/core/services/apiCategoriaPublicacion.dart';
 import 'package:app/core/viewmodels/login_state.dart';
@@ -21,6 +22,7 @@ class crudModel extends ChangeNotifier{
   List<Formacion> formacionUser;
   List<Categoria> categorias;
   List<PublicacionTrabajoUser> publicacionesUser;
+  List<PropuestaPostulante> propuestasPostulantes;
 
   Future<List<User>> fetchUsers() async{
     var result = await _api.getDataCollection();
@@ -117,21 +119,21 @@ class crudModel extends ChangeNotifier{
 
   // Publicaiones de usuarios----------------------------------------------------------------------------------------------------------
   Future addPublicacionUser(String idDocUserCollection, PublicacionTrabajoUser data )async{
-    var result= await _api.addDocumentInSubCollectionPublication(idDocUserCollection, 'publicacion_trabajo', data.toJson());
+    var result= await _api.addDocumentInSubCollectionPublication(idDocUserCollection, 'publicaciones_trabajos', data.toJson());
     return ;
   }
   Future editPublicacionUser(String idDocUserCollection,String idDocSubCollection, PublicacionTrabajoUser data)async{
-    var result= await _api.updateDocumentInSubCollectionPublication(idDocUserCollection, 'publicacion_trabajo', idDocSubCollection, data.toJson());
+    var result= await _api.updateDocumentInSubCollectionPublication(idDocUserCollection, 'publicaciones_trabajos', idDocSubCollection, data.toJson());
     return ;
   }
 
   Future deletePublicacionUser(String idDocUserCollection,String idDocSubCollection)async{
-    var result= await _api.removeDocumentFromSubCollectionByIdPublication(idDocUserCollection, 'publicacion_trabajo', idDocSubCollection);
+    var result= await _api.removeDocumentFromSubCollectionByIdPublication(idDocUserCollection, 'publicaciones_trabajos', idDocSubCollection);
     return ;
   }
 
   Future<List<PublicacionTrabajoUser>> getPublicacionesUser(String idDocUserCollection)async{
-    var result= await _api.getDataSubCollection(idDocUserCollection, 'publicacion_trabajo').catchError((e)=>print(e));
+    var result= await _api.getDataSubCollection(idDocUserCollection, 'publicaciones_trabajos').catchError((e)=>print(e));
     publicacionesUser=result.documents
         .map((doc) => PublicacionTrabajoUser.fromMap(doc.data, doc.documentID))
         .toList();
@@ -139,7 +141,7 @@ class crudModel extends ChangeNotifier{
   }
 
   Future<PublicacionTrabajoUser> getPublicacionTrabajoById(String idDocUserCollection, String idDocPublicacionTrabajo) async {
-    var doc = await _api.getDocumentFromSubCollectionById(idDocUserCollection, 'publicacion_trabajo', idDocPublicacionTrabajo) ;
+    var doc = await _api.getDocumentFromSubCollectionById(idDocUserCollection, 'publicaciones_trabajos', idDocPublicacionTrabajo) ;
     if(doc.exists){
       return  PublicacionTrabajoUser.fromMap(doc.data, doc.documentID);
     }
@@ -160,9 +162,27 @@ class crudModel extends ChangeNotifier{
   }
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-// Publicaciones General---Todos los usuarios---------------------------------------------------------------------------------------
+// Propuesta postulante---------------------------------------------------------------------------------------
 
+  Future addPropuestaPostulante(String idDocUserCollection,String idDocPublicacionTrabajo, PropuestaPostulante data,String idUserPostulante )async{
+    var result= await _api.addDocumentInSubCollection2PropuestaPostulante(
+        idDocUserCollection,
+        'publicaciones_trabajos',
+        idDocPublicacionTrabajo,
+        'propuestas_postulantes',
+        data.toJson(),
+        idUserPostulante
+    );
+    return ;
+  }
 
+  Future<List<PropuestaPostulante>> getPropuestasPostulantesTrabajo(String idDocUserCollection,String idDocPublicacionTrabajo)async{
+    var result= await _api.getDataSubCollection2(idDocUserCollection, 'publicaciones_trabajos',idDocPublicacionTrabajo,"propuestas_postulantes").catchError((e)=>print(e));
+    propuestasPostulantes=result.documents
+        .map((doc) => PropuestaPostulante.fromMap(doc.data, doc.documentID))
+        .toList();
+    return propuestasPostulantes;
+  }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
