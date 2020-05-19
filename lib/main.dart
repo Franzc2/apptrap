@@ -1,6 +1,7 @@
 
 import 'package:app/locator.dart';
 import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/ui/views/chats_user_page.dart';
 import 'package:app/ui/views/mis_postulaciones_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
                   '/homePage': (context)=>HomePage(),
                   '/misPublicaciones': (context)=>MisPublicacionesPage(),
                   '/misPostulaciones': (context)=>MisPostulacionesPage(),
+                  '/chatsUserPage': (context)=> ChatsUserPage(),
                 },
               );
             }

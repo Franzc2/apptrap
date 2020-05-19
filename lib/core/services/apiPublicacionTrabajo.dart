@@ -23,4 +23,5 @@ class ApiPublicacionTrabajo{
   Future<void> removeDocumentPublicacion(String id){
     return ref.document(id).delete();
   }
+
 }

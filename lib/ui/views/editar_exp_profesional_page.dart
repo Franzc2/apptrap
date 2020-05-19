@@ -241,7 +241,8 @@ class _EditarExpProfesionalPageState extends State<EditarExpProfesionalPage> {
               child:
               RaisedButton(
                 color: Color.fromRGBO(63, 81, 181, 1),
-                child: Text("Guardar",style: TextStyle(fontSize: 18,color: Colors.white),),
+                child:
+                Text("Guardar",style: TextStyle(fontSize: 18,color: Colors.white),),
                 onPressed: ()async{
                   if (keyForm.currentState.validate()) {
                     print("empresa ${empresaCtrl.text}");
@@ -264,7 +265,7 @@ class _EditarExpProfesionalPageState extends State<EditarExpProfesionalPage> {
                           funciones: funcionesCtrl.text,
                         )
                     );
-                    loginState.cargarExperienciaProfesionalUser(widget.user.id);
+                    await loginState.cargarExperienciaProfesionalUser(widget.user.id);
                     Navigator.pop(context);
                   }
                   else{

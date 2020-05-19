@@ -1,11 +1,13 @@
 import 'dart:ui';
 
+import 'package:app/core/models/chatModel.dart';
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/publicacionTrabajoModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
 import 'package:app/ui/views/agregar_propuesta_postulante_trabajo_page.dart';
+import 'package:app/ui/views/chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +25,7 @@ class DetallesPublicacionTrabajoParaPostulantesPage extends StatefulWidget {
 class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<DetallesPublicacionTrabajoParaPostulantesPage> {
   GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey();
   var _formatPublicacion = DateFormat.yMMMd('es').add_jm();
+  bool _cargandoChat=false;
 
   @override
   void initState() {
@@ -103,7 +106,7 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                   );
               }
               else{
-                User user=userSnap.data;
+                User userPublicador=userSnap.data;
                 return
                     ListView(
                       padding: EdgeInsets.only(top: 8.0,right: 8.0,left: 8.0, bottom: 30.0),
@@ -127,23 +130,55 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                                   Container(
                                     child: CircleAvatar(
                                       radius: 30.0,
-                                      child: ClipOval( child: Image.network(user.urlImagePerfil,width: 60,height: 60,fit: BoxFit.cover,),
+                                      child: ClipOval( child: Image.network(userPublicador.urlImagePerfil,width: 60,height: 60,fit: BoxFit.cover,),
                                       ),
                                     ),
                                     padding: EdgeInsets.all(10.0),
                                   ),
                                   Column(
                                     children: <Widget>[
-                                      Text(' '+user.nombreCompleto,style: TextStyle(fontSize: 16,color: Color.fromRGBO(33, 33, 33, 1)),),
+                                      Text(' '+userPublicador.nombreCompleto,style: TextStyle(fontSize: 16,color: Color.fromRGBO(33, 33, 33, 1)),),
                                       Row(
                                         children: <Widget>[
                                           Icon(Icons.location_on,color: Colors.black38,),
-                                          Text(user.ciudadRecidencia)
+                                          Text(userPublicador.ciudadRecidencia)
                                         ],
                                       )
                                     ],
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                  ),
+                                  Expanded(child: infoUser.id==userPublicador.id?
+                                      Container():
+                                  Container(
+                                    child: Container(
+                                      child: IconButton(
+                                          icon: Icon(Icons.message,size: 30,color: Colors.green,),
+                                          onPressed: ()async{
+                                            if(_cargandoChat==true){
+                                              print("esta cargando");
+                                            }else{
+                                              _cargandoChat=true;
+                                              print(infoUser.id);
+                                              print(userPublicador.id);
+                                              Chat chat=await _crud.getChat(infoUser.id, userPublicador.id);
+                                              _cargandoChat=false;
+                                              if(chat==null){
+                                                print("no existe un chat algo esta mal se supone que se tenia que registrar");
+                                              }else{
+                                                print("chat: "+chat.toString());
+                                                _cargandoChat? null:
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatPage(otroUser: userPublicador,chat: chat,)));
+                                              }
+                                            }
+
+                                          },
+                                          ),
+                                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                      alignment: Alignment.centerRight,
+                                    ),
                                   )
+                                  )
+
                                 ],
                               ),
                             ],

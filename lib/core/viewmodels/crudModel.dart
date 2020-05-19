@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:app/core/models/categoriaPublicacionModel.dart';
+import 'package:app/core/models/chatModel.dart';
+import 'package:app/core/models/mensajeModel.dart';
 import 'package:app/core/models/propuestaPostulanteModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/core/services/apiCategoriaPublicacion.dart';
+import 'package:app/core/services/apiChat.dart';
 import 'package:app/core/viewmodels/login_state.dart';
 import 'package:flutter/material.dart';
 import '../../locator.dart';
@@ -16,6 +19,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class crudModel extends ChangeNotifier{
   ApiUser _api= locator<ApiUser>();
   ApiCategoriaPublicacion _apiCategoriaPublicacon= locator<ApiCategoriaPublicacion>();
+  ApiChat _apiChat=locator<ApiChat>();
 
   List<User> users;
   List<ExpProfesional> expProfUser;
@@ -195,6 +199,31 @@ class crudModel extends ChangeNotifier{
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
+  Future<Chat> getChat(String idUser,String idOtroUser) async {
+    var doc = await _apiChat.getChat(idUser, idOtroUser);
+    if(doc==null){
+      return null;
+    }
+    else{
+      return  Chat.fromMap(doc.data, doc.documentID);
+    }
+  }
 
+  Stream<QuerySnapshot> mensajesChatStream(String idChat) {
+    return _apiChat.streamMensajesChat(idChat);
+  }
+
+  Stream<QuerySnapshot> mensajesChatStream1(String idUser,String idChat) {
+    return _apiChat.streamMensajesChat1(idUser,idChat);
+  }
+
+  Future addMensaje(String idChat, Mensaje data)async{
+    var result = await _apiChat.addMensaje(idChat, data.toJson(),data);
+    return;
+  }
+
+  Stream<QuerySnapshot> streamChatsUser(String idUser){
+    return _apiChat.streamChatsUser(idUser);
+  }
 
 }

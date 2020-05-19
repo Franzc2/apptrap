@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
         ListTile(
           leading: Icon(Icons.message),
           title: Text('Bandeja de entrada'),
-          onTap: () => Navigator.of(context).push(_NewPage(2)),
+          onTap: ()=>Navigator.pushNamed(context, '/chatsUserPage')
         ),
         ListTile(
           leading: Icon(Icons.note_add),

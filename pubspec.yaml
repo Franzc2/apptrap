@@ -73,6 +73,7 @@ flutter:
     - assets/logos/logo.png
     - assets/logos/facebook-logo.png
     - assets/logos/gmail-logo.png
+    - assets/images/send.png
 #    - assets/images/logo.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg

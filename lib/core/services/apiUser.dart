@@ -7,7 +7,6 @@ import '../../locator.dart';
 
 class ApiUser{
   ApiPublicacionTrabajo _apiPublicaconTrabajo= locator<ApiPublicacionTrabajo>();
-//  ApiPublicacionTrabajo _apiPublicaconTrabajo= new ApiPublicacionTrabajo(path);
 
   final Firestore _db= Firestore.instance;
   final String path;
