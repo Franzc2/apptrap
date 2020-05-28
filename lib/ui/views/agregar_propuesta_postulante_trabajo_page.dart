@@ -59,7 +59,7 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
           color: Color.fromRGBO(189, 189, 189, 0.01),
 
           child: FutureBuilder(
-            future: _crud.getUserById(widget.publicacionTrabajoAlgolia.idUser),
+            future: _crud.getUserById(widget.publicacionTrabajoAlgolia.idUserPublicador),
             builder: (_, userSnap){
               if(userSnap.connectionState==ConnectionState.waiting){
                 return Center(
@@ -103,7 +103,7 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
                                           text: "Lugar de Trabajo: ",
                                           style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54)
                                         ),
-                                        new TextSpan(text: widget.publicacionTrabajoAlgolia.lugarTrabajo)
+                                        new TextSpan(text: widget.publicacionTrabajoAlgolia.modalidadDeTrabajo)
                                       ]
                                     )
                                 ),
@@ -215,7 +215,7 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
                                   print("estado postulacion: en revición");
 //                      keyForm.currentState.reset();
                                   await _crud.addPropuestaPostulante(
-                                      widget.publicacionTrabajoAlgolia.idUser,
+                                      widget.publicacionTrabajoAlgolia.idUserPublicador,
                                       widget.publicacionTrabajoAlgolia.id,
                                       PropuestaPostulante(
                                         contraOfertaPresupuesto: int.parse(presupuestoCtrl.text.replaceAll(",", "")),
@@ -223,7 +223,7 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
                                         idUserPostulante: infoUser.id,
                                         mensajeOpcional: mensajeCtrl.text,
                                         fechaCreacion: Timestamp.now(),
-                                        idUserPublicante: widget.publicacionTrabajoAlgolia.idUser,
+                                        idUserPublicante: widget.publicacionTrabajoAlgolia.idUserPublicador,
                                         idPublicacionTrabajoUserPublicante: widget.publicacionTrabajoAlgolia.id,
                                         categoriaPublicacionTrabajo: widget.publicacionTrabajoAlgolia.nombreCategoria,
                                         subCategoriaPublicacionTrabajo: widget.publicacionTrabajoAlgolia.nombreSubcategoria,

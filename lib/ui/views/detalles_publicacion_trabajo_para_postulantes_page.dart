@@ -8,6 +8,7 @@ import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
 import 'package:app/ui/views/agregar_propuesta_postulante_trabajo_page.dart';
 import 'package:app/ui/views/chat_page.dart';
+import 'package:app/ui/views/personal_information_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -26,12 +27,14 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
   GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey();
   var _formatPublicacion = DateFormat.yMMMd('es').add_jm();
   bool _cargandoChat=false;
+  String sp='';
 
   @override
   void initState() {
     super.initState();
 
   }
+
 
   @override
   void dispose() {
@@ -49,11 +52,12 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
         backgroundColor: Color.fromRGBO(63, 81, 181, 1.0),
         title: Text(widget.publicacionTrabajoAlgolia.titulo),
       ),
-      floatingActionButton: FloatingActionButton.extended(
 
+      floatingActionButton:infoUser.id==widget.publicacionTrabajoAlgolia.idUserPublicador?null:
+      FloatingActionButton.extended(
         onPressed: (){
           if(infoUser!=null){
-            if(infoUser.id==widget.publicacionTrabajoAlgolia.idUser){
+            if(infoUser.id==widget.publicacionTrabajoAlgolia.idUserPublicador){
               _scaffoldKey.currentState.showSnackBar(
                   SnackBar(
                     duration: Duration(milliseconds: 2000),
@@ -70,7 +74,12 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
               );
             }
             else{
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>AgregarPropuestaPostulanteTrabajoPage(publicacionTrabajoAlgolia: widget.publicacionTrabajoAlgolia,)));
+              if(infoUser.token==""){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,)));
+              }else{
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>AgregarPropuestaPostulanteTrabajoPage(publicacionTrabajoAlgolia: widget.publicacionTrabajoAlgolia,)));
+              }
+
             }
           }
         },
@@ -82,7 +91,7 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
       body: Container(
         color: Color.fromRGBO(189, 189, 189, 0.01),
         child: FutureBuilder(
-          future: _crud.getUserById(widget.publicacionTrabajoAlgolia.idUser),
+          future: _crud.getUserById(widget.publicacionTrabajoAlgolia.idUserPublicador),
           builder: (_, userSnap){
             if(userSnap.connectionState==ConnectionState.waiting){
               return Center(
@@ -166,11 +175,12 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                                                 print("no existe un chat algo esta mal se supone que se tenia que registrar");
                                               }else{
                                                 print("chat: "+chat.toString());
-                                                _cargandoChat? null:
+                                                _cargandoChat? null
+                                                    :infoUser.token==""?
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,))):
                                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatPage(otroUser: userPublicador,chat: chat,)));
                                               }
                                             }
-
                                           },
                                           ),
                                       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -195,7 +205,7 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                                   child: Text(widget.publicacionTrabajoAlgolia.nombreSubcategoria,style: TextStyle(fontSize: 16,color: Colors.blueGrey,fontWeight: FontWeight.bold),),
                                 ),
                                 SizedBox(height: 5.0,),
-                                Text("Lugar de Trabajo: "+ widget.publicacionTrabajoAlgolia.lugarTrabajo),
+                                Text("Lugar de Trabajo: "+ widget.publicacionTrabajoAlgolia.modalidadDeTrabajo),
                                 SizedBox(height: 5.0,),
                                 Text("Presupuesto: "+widget.publicacionTrabajoAlgolia.presupuesto.toString()+" Bs."),
                                 SizedBox(height: 5.0,),

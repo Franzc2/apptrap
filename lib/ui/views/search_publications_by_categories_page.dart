@@ -3,13 +3,17 @@ import 'dart:convert';
 import 'package:algolia/algolia.dart';
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/publicacionTrabajoModel.dart';
+import 'package:app/core/models/userModel.dart';
+import 'package:app/core/viewmodels/login_state.dart';
 import 'package:app/ui/views/detalles_publicacion_trabajo_page.dart';
 import 'package:app/ui/views/detalles_publicacion_trabajo_para_postulantes_page.dart';
+import 'package:app/ui/views/personal_information_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class SearchPublicationsByCategoriesPage extends StatefulWidget {
   final String nombreCategoria;
@@ -52,6 +56,7 @@ class _SearchPublicationsByCategoriesPageState extends State<SearchPublicationsB
 
   @override
   Widget build(BuildContext context) {
+    final User infoUser=Provider.of<LoginState>(context).infoUser();
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
@@ -150,7 +155,11 @@ class _SearchPublicationsByCategoriesPageState extends State<SearchPublicationsB
                             ),
                           ),
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
+//                            if(infoUser.token==''){
+//                              Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,)));
+//                            }else{
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
+//                            }
                           },
                         ),
 //                        shape: RoundedRectangleBorder(

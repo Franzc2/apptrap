@@ -14,7 +14,7 @@ class ApiChat{
   }
 
   Stream<QuerySnapshot> streamChatsUser(String idUser){
-    return ref.where('idsUsers',arrayContains: idUser).snapshots(); //snapshots();
+    return ref.where('idsUsers',arrayContains: idUser).orderBy('fechaUltimoMensaje',descending: true).snapshots(); //snapshots();
   }
 
   Stream<QuerySnapshot> streamMensajesChat(String idChat){
@@ -43,6 +43,7 @@ class ApiChat{
     else{
       chat.numeroMensajesNuevosParaIdUser1=chat.numeroMensajesNuevosParaIdUser1+1;
     }
+    chat.fechaUltimoMensaje=mensaje.fechaMensaje;
     updateChat(chat.toJson(), chat.id);
   }
 
@@ -73,7 +74,7 @@ class ApiChat{
           Chat(
             idUser1: _idUser,
             idUser2: _idOtroUser,
-            fechaUltimoMesaje: null,
+            fechaUltimoMensaje: null,
             numeroMensajesNuevosParaIdUser1: 0,
             numeroMensajesNuevosParaIdUser2: 0,
             idsUsers: [_idUser,_idOtroUser],

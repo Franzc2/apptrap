@@ -63,7 +63,7 @@ class _MisPostulacionesPageState extends State<MisPostulacionesPage> {
                       Icon(Icons.style,size: 120.0,color: Color.fromRGBO(197, 202, 232, 1.0),),
                       SizedBox(height: 10,),
                       Center(
-                        child: Text("Aún no publicaste trabajos.",style: TextStyle(color: Colors.black38),),
+                        child: Text("No se encontraron postulaciones en curso.",style: TextStyle(color: Colors.black38),),
                       ),
                     ],
                   ),

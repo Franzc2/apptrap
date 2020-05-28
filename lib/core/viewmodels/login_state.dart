@@ -130,6 +130,11 @@ class LoginState with ChangeNotifier{
     notifyListeners();
   }
 
+  Future<void> cargarInformacionPersonal(String idUser)async{
+    user=await userCrud.getUserById(idUser);
+    notifyListeners();
+  }
+
   cargarExperienciaProfesionalUser(String idUser)async{
     _expProfUser= await userCrud.getExperienceProfUser(idUser);
     notifyListeners();
@@ -156,6 +161,7 @@ class LoginState with ChangeNotifier{
           numCI: '',
           urlDocumentCurriculum: '',
           nameDocCurriculum: '',
+          token: '',
         ),
         id
     );

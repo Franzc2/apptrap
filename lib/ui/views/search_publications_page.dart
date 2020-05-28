@@ -1,10 +1,14 @@
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/publicacionTrabajoModel.dart';
+import 'package:app/core/models/userModel.dart';
+import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/ui/views/personal_information_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:algolia/algolia.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'detalles_publicacion_trabajo_para_postulantes_page.dart';
 
@@ -52,6 +56,7 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final User infoUser=Provider.of<LoginState>(context).infoUser();
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -134,8 +139,11 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
                             ),
                           ),
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
-
+//                            if(infoUser.token==''){
+//                              Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,)));
+//                            }else{
+                              Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
+//                            }
                           },
                         ),
 //                        shape: RoundedRectangleBorder(

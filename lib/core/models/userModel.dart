@@ -18,7 +18,6 @@ class User{
   String token;
 
 
-
   User({
     this.id,
     this.nombreCompleto,

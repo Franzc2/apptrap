@@ -1,6 +1,7 @@
 import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +23,8 @@ class PersonalInformationPage extends StatefulWidget {
 }
 
 class _PersonalInformationPageState extends State<PersonalInformationPage> {
-
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  String tokenUser="";
   String fechaNacimientoFire="";
 
   final formatFechaNacimientoTextField= new DateFormat('dd-MM-yyyy');
@@ -41,6 +43,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   void initState() {
     super.initState();
     cargarDatos();
+    getToken();
   }
 
   @override
@@ -48,11 +51,15 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     super.dispose();
   }
 
+  getToken()async{
+    tokenUser = await _fcm.getToken();
+    print ("token User: "+ tokenUser);
+  }
+
 
   Widget datetime() {
     return CupertinoDatePicker(
       initialDateTime: DateTime(DateTime.now().year-17,),
-      
       onDateTimeChanged: (DateTime newdate) {
         print(newdate);
         fechaNacimientoCtrl.text=formatFechaNacimientoTextField.format(newdate);
@@ -227,11 +234,11 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                             estadoCuenta: widget.user.estadoCuenta,
                             habilidades: widget.user.habilidades,
                             nameDocCurriculum: widget.user.nameDocCurriculum,
-                            token:""
+                            token:tokenUser
                           ),
                           widget.user.id
                       );
-                      await loginState.cargarDatosUser(widget.user.id);
+                      await loginState.cargarInformacionPersonal(widget.user.id);
                       Navigator.pop(context);
                     }
                     else{

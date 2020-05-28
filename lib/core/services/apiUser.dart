@@ -1,4 +1,5 @@
 
+import 'package:app/core/models/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app/core/services/apiPublicacionTrabajo.dart';
 import 'dart:async';
@@ -64,10 +65,14 @@ class ApiUser{
   }
 //--------------------------------------------------------------------------------------------------------------
   //esta funcion es solo para publicaciones de usuarios que a la vez insertan en otra coleccion llamada "publicaciones"
-  Future<void> addDocumentInSubCollectionPublication(String idDocCollection, String nameSubCollection, Map data) {
+  Future<void> addDocumentInSubCollectionPublication(String idDocCollection, String nameSubCollection, Map data, User dataUserPublicador) {
     DocumentReference refDocumentPublicacionUser=ref.document(idDocCollection).collection(nameSubCollection).document();
     String idPublicacionUser=refDocumentPublicacionUser.documentID+Timestamp.now().millisecondsSinceEpoch.toString();
-    data['idUser']=idDocCollection;
+    data['idUserPublicador']=idDocCollection;
+    data['userPublicadorNombre']=dataUserPublicador.nombreCompleto;
+    data['userPublicadorCorreoElectronico']=dataUserPublicador.correoElectronico;
+    data['userPublicadorUrlImagen']=dataUserPublicador.urlImagePerfil;
+    data['userPublicadorCiudadResidencia']=dataUserPublicador.ciudadRecidencia;
     _apiPublicaconTrabajo.addDocumentPublicacion(data, idPublicacionUser);
     return ref.document(idDocCollection).collection(nameSubCollection).document(idPublicacionUser).setData(data);
   }

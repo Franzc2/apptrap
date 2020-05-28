@@ -34,13 +34,26 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
     'Por trabajo finalizado',
     'Por horas de trabajo'
   ];
+  static const menuModalidadDeTrabajo=<String>[
+    'Presencial',
+    'Semipresencial',
+    'Teletrabajo'
+  ];
+
   final List<DropdownMenuItem<String>> _dropDownMenuRazonDePago=menuRazonDePago
       .map(
           (String value)=>DropdownMenuItem<String>(
             value: value,
              child: Text(value),
       )).toList();
+  final List<DropdownMenuItem<String>> _dropDownModalidadDeTrabajo=menuModalidadDeTrabajo
+      .map(
+          (String value)=>DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      )).toList();
   String _btnSelectRazonDePago;
+  String _btnSelectModalidadDeTrabajo;
 
   GlobalKey<FormState> keyForm = new GlobalKey();
   TextEditingController tituloCtrl= new TextEditingController();
@@ -109,8 +122,9 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
     tituloCtrl.text=widget.publicacionTrabajo.titulo;
     descripcionCtrl.text=widget.publicacionTrabajo.descripcion;
     habilidadesNecesariasCtrl.text=widget.publicacionTrabajo.habilidadesNecesarias;
-    lugarTrabajoCtrl.text=widget.publicacionTrabajo.lugarTrabajo;
+    lugarTrabajoCtrl.text=widget.publicacionTrabajo.modalidadDeTrabajo;
     _btnSelectRazonDePago=widget.publicacionTrabajo.razonDePago;
+    _btnSelectModalidadDeTrabajo=widget.publicacionTrabajo.modalidadDeTrabajo;
     presupuestoCtrl.text=widget.publicacionTrabajo.presupuesto.toString();
     fechaLimiteCtrl.text=formatFechaTextField.format(widget.publicacionTrabajo.fechaLimite.toDate());
     fechaLimiteFire=formatFechaForFire.format(widget.publicacionTrabajo.fechaLimite.toDate());
@@ -204,16 +218,32 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
                   controller: habilidadesNecesariasCtrl,
                   validator: validateHabilidades,
                 ),
+//                SizedBox(height: 15,),
+//                TextFormField(
+//                  decoration: const InputDecoration(
+//                      labelText: "Lugar de Trabajo",
+//                      border: OutlineInputBorder()
+//                  ),
+//                  keyboardType:TextInputType.text ,
+//                  textCapitalization: TextCapitalization.sentences,
+//                  controller: lugarTrabajoCtrl,
+//                  validator: validateLugarTrabajo,
+//                ),
                 SizedBox(height: 15,),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Lugar de Trabajo",
-                      border: OutlineInputBorder()
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                      labelText:"Modalidad de trabajo",
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.only(top: 5,bottom: 5,right: 13,left: 13)
                   ),
-                  keyboardType:TextInputType.text ,
-                  textCapitalization: TextCapitalization.sentences,
-                  controller: lugarTrabajoCtrl,
-                  validator: validateLugarTrabajo,
+                  value: _btnSelectModalidadDeTrabajo,
+                  onChanged: (String newValue){
+                    setState(() {
+                      _btnSelectModalidadDeTrabajo=newValue;
+                    });
+                  },
+                  items: this._dropDownModalidadDeTrabajo,
+                  validator: validateQueNecesita,
                 ),
 
                 SizedBox(height: 15,),
@@ -300,7 +330,7 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
                                 fechaCreacion: widget.publicacionTrabajo.fechaCreacion,
                                 nivelImportancia: 0,
                                 estadoPublicacionTrabajo: "Evaluando propuestas",
-                                lugarTrabajo: lugarTrabajoCtrl.text
+                                modalidadDeTrabajo: lugarTrabajoCtrl.text
                             )
                         );
 //                        Navigator.popUntil(context, ModalRoute.withName('/misPublicaciones'));

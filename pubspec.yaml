@@ -48,6 +48,10 @@ dependencies:
   flutter_masked_text: ^0.8.0
   pattern_formatter: ^1.0.1
   algolia: ^0.1.7
+  firebase_messaging: ^6.0.15
+  flutter_local_notifications: ^1.4.3
+  image_picker: ^0.6.6+4
+  video_player: ^0.10.11+1
 
 dev_dependencies:
   flutter_test:

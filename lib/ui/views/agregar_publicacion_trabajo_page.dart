@@ -2,6 +2,7 @@ import 'package:app/core/models/categoriaPublicacionModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/ui/views/info_para_destacar_publicacion_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+
+import 'info_para resaltar2.dart';
 
 
 
@@ -103,18 +106,35 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
   List<String> _subcategorias=[];
   List<DropdownMenuItem<String>> _dropDownMenuSubcategorias;
   String _btnSelectSubCategoria;
+  List<String> urlsImagesParaDestacarPublicacion=[];
 
   static const menuRazonDePago=<String>[
     'Por trabajo finalizado',
     'Por horas de trabajo'
   ];
+
+  static const menuModalidadDeTrabajo=<String>[
+    'Presencial',
+    'Semipresencial',
+    'Teletrabajo'
+  ];
+
   final List<DropdownMenuItem<String>> _dropDownMenuRazonDePago=menuRazonDePago
       .map(
           (String value)=>DropdownMenuItem<String>(
             value: value,
             child: Text(value),
       )).toList();
+
+  final List<DropdownMenuItem<String>> _dropDownModalidadDeTrabajo=menuModalidadDeTrabajo
+      .map(
+          (String value)=>DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      )).toList();
+
   String _btnSelectRazonDePago;
+  String _btnSelectModalidadDeTrabajo;
 
 
   GlobalKey<FormState> keyForm = new GlobalKey();
@@ -267,18 +287,33 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                   controller: habilidadesNecesariasCtrl,
                   validator: validateHabilidades,
                 ),
+//                SizedBox(height: 15,),
+//                TextFormField(
+//                  decoration: const InputDecoration(
+//                      labelText: "Lugar de Trabajo",
+//                      border: OutlineInputBorder()
+//                  ),
+//                  keyboardType:TextInputType.text ,
+//                  textCapitalization: TextCapitalization.sentences,
+//                  controller: lugarTrabajoCtrl,
+//                  validator: validateLugarTrabajo,
+//                ),
                 SizedBox(height: 15,),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Lugar de Trabajo",
-                      border: OutlineInputBorder()
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                      labelText:"Modalidad de trabajo",
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.only(top: 5,bottom: 5,right: 13,left: 13)
                   ),
-                  keyboardType:TextInputType.text ,
-                  textCapitalization: TextCapitalization.sentences,
-                  controller: lugarTrabajoCtrl,
-                  validator: validateLugarTrabajo,
+                  value: _btnSelectModalidadDeTrabajo,
+                  onChanged: (String newValue){
+                    setState(() {
+                      _btnSelectModalidadDeTrabajo=newValue;
+                    });
+                  },
+                  items: this._dropDownModalidadDeTrabajo,
+                  validator: validateQueNecesita,
                 ),
-
                 SizedBox(height: 15,),
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
@@ -333,12 +368,56 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                   validator: validateFechaLimite,
                 ),
                 SizedBox(height: 15,),
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Opcional",style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color:Colors.indigoAccent,
+                  ),),
+                ),
+                Container(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text("Quieres que tu publicación sea mas visible?"),
+//                          OutlineButton.icon(
+//                              onPressed: (){
+//                                Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoParaDestacarPublicacionPage()));
+//                              },
+//                              icon: Icon(Icons.star_border),
+//                              label: Text("Destacar publicación.")),
+                          OutlineButton.icon(
+                              onPressed: () async{
+                                urlsImagesParaDestacarPublicacion = await Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoParaDestacarPublicacionPage1()));
+                                print(urlsImagesParaDestacarPublicacion);
+                              },
+                              icon: urlsImagesParaDestacarPublicacion.length==0?Icon(Icons.star_border):Icon(Icons.star,color: Colors.amber,),
+                              label: urlsImagesParaDestacarPublicacion.length==0?Text("Destacar publicación"):Text("Publicación destacada!"))
+                        ],
+                      ),
+                    ),
+                    elevation: 2.0,
+                  ),
+
+                ),
+                Divider(),
+                SizedBox(height: 15,),
                 Container(
                   child:
                   RaisedButton(
                     color: Color.fromRGBO(63, 81, 181, 1),
                     child: Text("Publicar",style: TextStyle(fontSize: 18,color: Colors.white),),
                     onPressed: ()async{
+                      String url1="";
+                      String url2="";
+                      if(urlsImagesParaDestacarPublicacion.length>0){
+                        url1=urlsImagesParaDestacarPublicacion[0];
+                        url2=urlsImagesParaDestacarPublicacion[1];
+                      }
+
                       if (keyForm.currentState.validate()) {
                         print("categoria ${widget.nombrecategoria}");
                         print("que necesita ${_btnSelectSubCategoria}");
@@ -349,6 +428,7 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                         print("fecha limite ${fechaLimiteCtrl.text}");
                         print("lugar de trabajo ${lugarTrabajoCtrl.text}");
 //                      keyForm.currentState.reset();
+
                         await crudProvider.addPublicacionUser(
                             infoUser.id,
                             PublicacionTrabajoUser(
@@ -364,8 +444,12 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                               fechaCreacionAlgolia: Timestamp.now().seconds,
                               nivelImportancia: 0,
                               estadoPublicacionTrabajo: "Evaluando propuestas",
-                              lugarTrabajo: lugarTrabajoCtrl.text
-                            )
+//                              lugarTrabajo: lugarTrabajoCtrl.text
+                              modalidadDeTrabajo: _btnSelectModalidadDeTrabajo,
+                              urlImagePublicacion: url1,
+                              urlImageComprobantePago: url2
+                            ),
+                          infoUser
                         );
                         Navigator.popUntil(context, ModalRoute.withName('/misPublicaciones'));
                       }

@@ -14,7 +14,9 @@ class PublicacionTrabajoUser{
   Timestamp fechaLimite;
   num nivelImportancia;
   String estadoPublicacionTrabajo;
-  String lugarTrabajo;
+  String modalidadDeTrabajo;
+  String urlImagePublicacion;
+  String urlImageComprobantePago;
 
   PublicacionTrabajoUser({
     this.id,
@@ -30,7 +32,9 @@ class PublicacionTrabajoUser{
     this.fechaLimite,
     this.nivelImportancia,
     this.estadoPublicacionTrabajo,
-    this.lugarTrabajo
+    this.modalidadDeTrabajo,
+    this.urlImagePublicacion,
+    this.urlImageComprobantePago
   });
 
   PublicacionTrabajoUser.fromMap(Map snapshot, String id):
@@ -47,7 +51,9 @@ class PublicacionTrabajoUser{
         fechaLimite= snapshot['fechaLimite'] ?? null,
         nivelImportancia= snapshot['nivelImportancia'] ?? 0,
         estadoPublicacionTrabajo= snapshot["estadoPublicacionTrabajo"] ?? '',
-        lugarTrabajo= snapshot["lugarTrabajo"] ?? '';
+        modalidadDeTrabajo= snapshot["modalidadDeTrabajo"] ?? '',
+        urlImagePublicacion = snapshot['urlImagePublicacion'] ?? '',
+        urlImageComprobantePago=snapshot['urlImageComprobantePago'] ?? '';
 
 
   toJson(){
@@ -64,7 +70,9 @@ class PublicacionTrabajoUser{
       "fechaLimite": fechaLimite,
       "nivelImportancia": nivelImportancia,
       "estadoPublicacionTrabajo": estadoPublicacionTrabajo,
-      "lugarTrabajo": lugarTrabajo
+      "modalidadDeTrabajo": modalidadDeTrabajo,
+      "urlImagePublicacion": urlImagePublicacion,
+      "urlImageComprobantePago": urlImageComprobantePago
     };
   }
 }

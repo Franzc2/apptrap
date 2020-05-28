@@ -123,7 +123,7 @@ class _DetallesPublicacionTrabajoPageState extends State<DetallesPublicacionTrab
                                 children: <Widget>[
 //                                  Icon(Icons.location_on),
 //                                  SizedBox(width: 4,),
-                                  Text("Lugar: "+_publicacionTrabajo.lugarTrabajo),
+                                  Text("Modalidad de trabajo: "+_publicacionTrabajo.modalidadDeTrabajo),
                                 ],
                               ),
                               Text("Razón de pago: "+_publicacionTrabajo.razonDePago),

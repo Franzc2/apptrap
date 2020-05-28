@@ -4,6 +4,7 @@ import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -25,13 +26,12 @@ class _ChatPageState extends State<ChatPage> {
   TextEditingController messageEditingController = new TextEditingController();
   List<Mensaje> mensajes;
   var formatFecha = DateFormat.yMd('es');
-
-
 //  DateFormat.jm()
 
   @override
   void initState() {
     super.initState();
+
   }
 
   @override
@@ -175,7 +175,10 @@ class _ChatPageState extends State<ChatPage> {
                             Mensaje(
                               contenidoMensaje: messageEditingController.text,
                               fechaMensaje: Timestamp.now(),
-                              idUser: infoUser.id
+                              idUser: infoUser.id,
+                              otroUserToken: widget.otroUser.token,
+                              userUrlImagenPerfil: infoUser.urlImagePerfil,
+                              userNombre: infoUser.nombreCompleto
                             )
                           );
                           messageEditingController.text="";

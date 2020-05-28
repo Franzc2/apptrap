@@ -123,8 +123,8 @@ class crudModel extends ChangeNotifier{
 // ---------------------------------------------------------------------------------------------------------------------------------
 
   // Publicaiones de usuarios----------------------------------------------------------------------------------------------------------
-  Future addPublicacionUser(String idDocUserCollection, PublicacionTrabajoUser data )async{
-    var result= await _api.addDocumentInSubCollectionPublication(idDocUserCollection, 'publicaciones_trabajos', data.toJson());
+  Future addPublicacionUser(String idDocUserCollection, PublicacionTrabajoUser data,User dataUserPublicador )async{
+    var result= await _api.addDocumentInSubCollectionPublication(idDocUserCollection, 'publicaciones_trabajos', data.toJson(), dataUserPublicador);
     return ;
   }
   Future editPublicacionUser(String idDocUserCollection,String idDocSubCollection, PublicacionTrabajoUser data)async{

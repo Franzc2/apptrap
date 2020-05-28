@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PublicacionTrabajoAlgolia{
   String id;
-  String idUser;
+  String idUserPublicador;
   String nombreCategoria;
   String nombreSubcategoria;
   String titulo;
@@ -17,11 +17,18 @@ class PublicacionTrabajoAlgolia{
   timestamp fechaLimite;
   num nivelImportancia;
   String estadoPublicacionTrabajo;
-  String lugarTrabajo;
+  String modalidadDeTrabajo;
+  String userPublicadorNombre;
+  String userPublicadorCorreoElectronico;
+  String userPublicadorUrlImagen;
+  String userPublicadorCiudadResidencia;
+  String urlImagePublicacion;
+  String urlImageComprobantePago;
+
 
   PublicacionTrabajoAlgolia({
     this.id,
-    this.idUser,
+    this.idUserPublicador,
     this.nombreCategoria,
     this.nombreSubcategoria,
     this.titulo,
@@ -34,14 +41,20 @@ class PublicacionTrabajoAlgolia{
     this.fechaLimite,
     this.nivelImportancia,
     this.estadoPublicacionTrabajo,
-    this.lugarTrabajo
+    this.modalidadDeTrabajo,
+    this.userPublicadorNombre,
+    this.userPublicadorCorreoElectronico,
+    this.userPublicadorUrlImagen,
+    this.userPublicadorCiudadResidencia,
+    this.urlImagePublicacion,
+    this.urlImageComprobantePago,
   });
 
 //  factory PublicacionTrabajoAlgolia.fromJson(Map<String, dynamic> parsedJson){
   factory PublicacionTrabajoAlgolia.fromJson(Map parsedJson,String id){
     return PublicacionTrabajoAlgolia(
         id: id,
-        idUser: parsedJson['idUser'],
+        idUserPublicador: parsedJson['idUserPublicador'],
         nombreCategoria: parsedJson['nombreCategoria'],
         nombreSubcategoria: parsedJson['nombreSubcategoria'],
         titulo: parsedJson['titulo'],
@@ -54,7 +67,13 @@ class PublicacionTrabajoAlgolia{
         fechaLimite: timestamp.fromJson(parsedJson['fechaLimite']),
         nivelImportancia: parsedJson['nivelImportancia'],
         estadoPublicacionTrabajo: parsedJson['estadoPublicacionTrabajo'],
-        lugarTrabajo: parsedJson['lugarTrabajo']
+        modalidadDeTrabajo: parsedJson['modalidadDeTrabajo'],
+        userPublicadorNombre: parsedJson['userPublicadorNombre'],
+        userPublicadorCorreoElectronico: parsedJson['userPublicadorCorreoElectronico'],
+        userPublicadorUrlImagen: parsedJson['userPublicadorUrlImagen'],
+        userPublicadorCiudadResidencia: parsedJson['userPublicadorCiudadResidencia'],
+        urlImageComprobantePago: parsedJson['urlImageComprobantePago'],
+        urlImagePublicacion: parsedJson['urlImagePublicacion']
     );
   }
 

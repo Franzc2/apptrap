@@ -1,7 +1,9 @@
+import 'package:app/ui/views/buscar_empleos_page.dart';
 import 'package:app/ui/views/curriculum_page.dart';
 import 'package:app/ui/views/mis_publicaciones_page.dart';
 import 'package:app/ui/views/search_publications_by_categories_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,15 +28,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
   @override
   void initState() {
     super.initState();
+
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
 
 
 
@@ -88,7 +93,7 @@ class _HomePageState extends State<HomePage> {
         ListTile(
           leading: Icon(Icons.search),
           title: Text('Buscar empleos'),
-          onTap: () => Navigator.of(context).push(_NewPage(2)),
+            onTap: () {Navigator.pushNamed(context, '/buscarEmpleosPage');}
         ),
         ListTile(
           leading: Icon(Icons.list),
@@ -137,7 +142,7 @@ class _HomePageState extends State<HomePage> {
           ),
           centerTitle: true,
         ),
-        body:buildCategorias(),
+//        body:buildCategorias(),
         drawer: Drawer(
           child: drawerItems,
         ));
