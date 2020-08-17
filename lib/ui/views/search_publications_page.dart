@@ -1,8 +1,6 @@
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
-import 'package:app/core/models/publicacionTrabajoModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
-import 'package:app/ui/views/personal_information_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -36,6 +34,7 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
       apiKey: '484882b03fe047f42fb9ccbc998ad21d',
     );
     AlgoliaQuery query = algolia.instance.index('publicaciones').search(_searchText.text);
+    query=query.setFilters("nivelImportancia>0");
     _results = (await query.getObjects()).hits;
 
     setState(() {_searching = false;});

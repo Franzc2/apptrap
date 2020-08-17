@@ -16,6 +16,7 @@ class User{
   String estadoCuenta;
   String nameDocCurriculum;
   String token;
+  GeoPoint geoPoint;
 
 
   User({
@@ -32,7 +33,8 @@ class User{
     this.urlDocumentCurriculum,
     this.estadoCuenta,
     this.nameDocCurriculum,
-    this.token
+    this.token,
+    this.geoPoint
   });
 
   User.fromMap(Map snapshot, String id):
@@ -49,7 +51,8 @@ class User{
       urlDocumentCurriculum=snapshot['urlDocumentCurriculum'] ?? '',
       estadoCuenta=snapshot['estadoCuenta'] ?? '',
       nameDocCurriculum=snapshot['nameDocCurriculum'] ?? '',
-      token=snapshot['token'] ?? '';
+      token=snapshot['token'] ?? '',
+      geoPoint=snapshot['geoPoint'] ?? null;
 
 
   toJson() {
@@ -66,7 +69,8 @@ class User{
     "urlDocumentCurriculum": urlDocumentCurriculum,
     "estadoCuenta": estadoCuenta,
     "nameDocCurriculum": nameDocCurriculum,
-    "token": token
+    "token": token,
+    "geoPoint": geoPoint
     };
   }
 }

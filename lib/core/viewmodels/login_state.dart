@@ -155,7 +155,7 @@ class LoginState with ChangeNotifier{
           urlImagePerfil: _user.photoUrl,
           telefonoCelular: '',
           ciudadRecidencia: '',
-          estadoCuenta: '',
+          estadoCuenta: '1',
           habilidades:[],
           idiomas: [],
           numCI: '',

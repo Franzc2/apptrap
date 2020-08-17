@@ -219,7 +219,7 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
                                       widget.publicacionTrabajoAlgolia.id,
                                       PropuestaPostulante(
                                         contraOfertaPresupuesto: int.parse(presupuestoCtrl.text.replaceAll(",", "")),
-                                        estadoPostulacion: "en revición",
+                                        estadoPostulacion: "0",
                                         idUserPostulante: infoUser.id,
                                         mensajeOpcional: mensajeCtrl.text,
                                         fechaCreacion: Timestamp.now(),
@@ -228,6 +228,8 @@ class _AgregarPropuestaPostulanteTrabajoPageState extends State<AgregarPropuesta
                                         categoriaPublicacionTrabajo: widget.publicacionTrabajoAlgolia.nombreCategoria,
                                         subCategoriaPublicacionTrabajo: widget.publicacionTrabajoAlgolia.nombreSubcategoria,
                                         tituloPublicacionTrabajo: widget.publicacionTrabajoAlgolia.titulo,
+                                        calificacionAPostulanteGanador: 0, // 0 => no tiene calificacion
+                                        calificacionAEmpleador: 0
                                       ),
                                       infoUser.id
                                   ).then((a){print("show");

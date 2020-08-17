@@ -96,15 +96,6 @@ class _ChatsUserPageState extends State<ChatsUserPage> {
                                                 ?Text(formatHora.format(mensajes.first.fechaMensaje.toDate()),style: TextStyle(fontSize: 12.0),)
                                                 :Text(formatFecha.format(mensajes.first.fechaMensaje.toDate()),style: TextStyle(fontSize: 12.0))
                                           ),
-//                                          Container(
-//                                            child: infoUser.id==chat.idUser1
-//                                                ?Text(chat.numeroMensajesNuevosParaIdUser1!=0
-//                                                ?chat.numeroMensajesNuevosParaIdUser1.toString()
-//                                                :"")
-//                                                :Text(chat.numeroMensajesNuevosParaIdUser2!=0
-//                                                ?chat.numeroMensajesNuevosParaIdUser2.toString()
-//                                                :"")
-//                                          )
                                           Container(
                                             child: infoUser.id==chat.idUser1
                                                 ?Container(height: 25.0,width: 25.0, child: chat.numeroMensajesNuevosParaIdUser1==0?Container():Container(decoration:BoxDecoration(color: Colors.amber,borderRadius: BorderRadius.all(Radius.circular(12.0))),child: Center(child: Text(chat.numeroMensajesNuevosParaIdUser1.toString(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),)),))
@@ -127,12 +118,6 @@ class _ChatsUserPageState extends State<ChatsUserPage> {
                                 }
                               },
                             );
-                          Card(
-                            child: ListTile(
-                              leading: CircleAvatar(child: ClipOval(child: Image.network(otroUser.urlImagePerfil),),),
-                              title: Text(otroUser.nombreCompleto),
-                            ),
-                          );
                         }
                       },
                     );

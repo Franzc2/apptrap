@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:app/core/models/chatModel.dart';
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
-import 'package:app/core/models/publicacionTrabajoModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';

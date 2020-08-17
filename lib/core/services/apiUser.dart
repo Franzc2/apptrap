@@ -93,6 +93,10 @@ class ApiUser{
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).collection(nameSubCollection2).orderBy('fechaCreacion',descending: true).getDocuments() ;
   }
 
+  Future<QuerySnapshot> getDataSubCollection2PostulantesGanadores(String idDocCollection, String nameSubCollection,String idDocSubCollection,String nameSubCollection2) {
+    return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).collection(nameSubCollection2).where('estadoPostulacion', isEqualTo: '1').orderBy('fechaCreacion',descending: true).getDocuments() ;
+  }
+
 // ---------------------------------------------------------------------------------------------------------------------------------
   Future<DocumentReference> addDocumentInSubCollection2(
       String idDocCollection,
@@ -130,6 +134,27 @@ class ApiUser{
           .document(idPropuestaPostulante)
           .setData(data);
   }
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+  Future<void> updateDocumentInSubCollection2PropuestaPostulante(
+      String idDocCollection,
+      String nameSubCollection,
+      String idDocSubCollection,
+      String nameSubCollection2,
+      String idDocSubCollection2, //idDoc propuesta postulancion
+      Map data,
+      String idUserPostulante
+      ) {
+    updateDocumentInSubCollection(idUserPostulante, "postulaciones" , idDocSubCollection2, data);
+    return
+      ref.document(idDocCollection)
+          .collection(nameSubCollection)
+          .document(idDocSubCollection)
+          .collection(nameSubCollection2)
+          .document(idDocSubCollection2)
+          .updateData(data) ;
+  }
+
 // ---------------------------------------------------------------------------------------------------------------------------------
   Future<void> updateDocumentInSubCollection2(
       String idDocCollection,

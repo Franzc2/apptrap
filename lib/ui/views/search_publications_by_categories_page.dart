@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:algolia/algolia.dart';
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
-import 'package:app/core/models/publicacionTrabajoModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
-import 'package:app/ui/views/detalles_publicacion_trabajo_page.dart';
 import 'package:app/ui/views/detalles_publicacion_trabajo_para_postulantes_page.dart';
 import 'package:app/ui/views/personal_information_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,6 +36,7 @@ class _SearchPublicationsByCategoriesPageState extends State<SearchPublicationsB
 
     AlgoliaQuery query = algolia.instance.index('publicaciones').search(_searchText.text);
     query = query.setFacetFilter('nombreCategoria:'+widget.nombreCategoria);
+    query = query.setFilters("nivelImportancia>0");
     _results = (await query.getObjects()).hits;
 
     setState(() {_searching = false;});

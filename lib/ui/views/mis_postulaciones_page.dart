@@ -2,10 +2,14 @@ import 'package:app/core/models/propuestaPostulanteModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/src/functions/estados.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'detalles_mi_postulacion_page.dart';
+import 'detalles_postulacion_page.dart';
 
 class MisPostulacionesPage extends StatefulWidget {
   MisPostulacionesPage({Key key}) : super(key: key);
@@ -91,7 +95,7 @@ class _MisPostulacionesPageState extends State<MisPostulacionesPage> {
                                               text: "Estado: ",
                                               style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black54)
                                           ),
-                                          new TextSpan(text: postulacion.estadoPostulacion,style: TextStyle(fontSize: 15.0,color: Colors.green,fontWeight: FontWeight.bold))
+                                          new TextSpan(text: getEstadoPostulacion(postulacion.estadoPostulacion.toString()),style: TextStyle(fontSize: 15.0,color: Colors.green,fontWeight: FontWeight.bold))
                                         ]
                                     ),
                                   ),
@@ -134,6 +138,7 @@ class _MisPostulacionesPageState extends State<MisPostulacionesPage> {
                             ),
                           ),
                           onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DetallesMiPostulacionPage(propuestaPostulante: postulacion,)));
 //                            this._scaffoldKey.currentState.showBottomSheet((context)=>_buildBottomSheet(context, infoUser.id, publicacionTrabajo.id));
                           },
                         ),

@@ -12,6 +12,8 @@ class PropuestaPostulante{
   String categoriaPublicacionTrabajo;
   String subCategoriaPublicacionTrabajo;
   String tituloPublicacionTrabajo;
+  num calificacionAPostulanteGanador;
+  num calificacionAEmpleador;
 
 
   PropuestaPostulante({
@@ -26,6 +28,8 @@ class PropuestaPostulante{
     this.categoriaPublicacionTrabajo,
     this.subCategoriaPublicacionTrabajo,
     this.tituloPublicacionTrabajo,
+    this.calificacionAPostulanteGanador,
+    this.calificacionAEmpleador
 });
 
   PropuestaPostulante.fromMap(Map snapshot, String id):
@@ -39,7 +43,9 @@ class PropuestaPostulante{
   fechaCreacion= snapshot['fechaCreacion'] ?? null,
   categoriaPublicacionTrabajo= snapshot['categoriaPublicacionTrabajo'] ?? '',
   subCategoriaPublicacionTrabajo=snapshot['subCategoriaPublicacionTrabajo'] ?? '',
-  tituloPublicacionTrabajo=snapshot['tituloPublicacionTrabajo'] ?? '';
+  tituloPublicacionTrabajo=snapshot['tituloPublicacionTrabajo'] ?? '',
+  calificacionAPostulanteGanador=snapshot['calificacionAPostulanteGanador'] ?? 0,
+  calificacionAEmpleador=snapshot['calificacionAEmpleador'] ?? 0;
 
   toJson(){
     return{
@@ -52,7 +58,9 @@ class PropuestaPostulante{
       "fechaCreacion": fechaCreacion,
       'categoriaPublicacionTrabajo': categoriaPublicacionTrabajo,
       'subCategoriaPublicacionTrabajo': subCategoriaPublicacionTrabajo,
-      'tituloPublicacionTrabajo': tituloPublicacionTrabajo
+      'tituloPublicacionTrabajo': tituloPublicacionTrabajo,
+      'calificacionAPostulanteGanador': calificacionAPostulanteGanador,
+      'calificacionAEmpleador': calificacionAEmpleador
     };
   }
 

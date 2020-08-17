@@ -4,6 +4,7 @@ import 'package:app/core/models/chatModel.dart';
 import 'package:app/core/models/mensajeModel.dart';
 import 'package:app/core/models/propuestaPostulanteModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
+import 'package:app/core/models/calificacionDeEmpleadoAEmpleador.dart';
 import 'package:app/core/services/apiCategoriaPublicacion.dart';
 import 'package:app/core/services/apiChat.dart';
 import 'package:app/core/viewmodels/login_state.dart';
@@ -28,6 +29,7 @@ class crudModel extends ChangeNotifier{
   List<PublicacionTrabajoUser> publicacionesUser;
   List<PropuestaPostulante> propuestasPostulantes;
   List<PropuestaPostulante> postulaciones;
+  List<CalificacionDeEmpleadoAEmpleador> calificacionesAEmpleador;
 
   Future<List<User>> fetchUsers() async{
     var result = await _api.getDataCollection();
@@ -181,8 +183,29 @@ class crudModel extends ChangeNotifier{
     return ;
   }
 
+
+  Future editPropuestaPostulante(String idDocUserCollection,String idDocPublicacionTrabajo,String idDocPropuestaPostulante, PropuestaPostulante data,String idUserPostulante )async{
+    var result =await _api.updateDocumentInSubCollection2PropuestaPostulante(
+        idDocUserCollection,
+        'publicaciones_trabajos',
+        idDocPublicacionTrabajo,
+        'propuestas_postulantes',
+        idDocPropuestaPostulante,
+        data.toJson(),
+        idUserPostulante);
+    return ;
+  }
+
+
   Future<List<PropuestaPostulante>> getPropuestasPostulantesTrabajo(String idDocUserCollection,String idDocPublicacionTrabajo)async{
     var result= await _api.getDataSubCollection2(idDocUserCollection, 'publicaciones_trabajos',idDocPublicacionTrabajo,"propuestas_postulantes").catchError((e)=>print(e));
+    propuestasPostulantes=result.documents
+        .map((doc) => PropuestaPostulante.fromMap(doc.data, doc.documentID))
+        .toList();
+    return propuestasPostulantes;
+  }
+  Future<List<PropuestaPostulante>> getPropuestasPostulantesGanadoresTrabajo(String idDocUserCollection,String idDocPublicacionTrabajo)async{
+    var result= await _api.getDataSubCollection2PostulantesGanadores(idDocUserCollection, 'publicaciones_trabajos',idDocPublicacionTrabajo,"propuestas_postulantes").catchError((e)=>print(e));
     propuestasPostulantes=result.documents
         .map((doc) => PropuestaPostulante.fromMap(doc.data, doc.documentID))
         .toList();
@@ -224,6 +247,19 @@ class crudModel extends ChangeNotifier{
 
   Stream<QuerySnapshot> streamChatsUser(String idUser){
     return _apiChat.streamChatsUser(idUser);
+  }
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+  Future addCalificacionDeEmpleadoAEmpleador(String idDocUserCollection, CalificacionDeEmpleadoAEmpleador data )async{
+    var result= await _api.addDocumentInSubCollection(idDocUserCollection, 'calificacionDeEmpleadosAEmpleador', data.toJson());
+    return ;
+  }
+  Future<List<CalificacionDeEmpleadoAEmpleador>> getCalificacionesAEmpleador(String idDocUserCollection)async{
+    var result= await _api.getDataSubCollection(idDocUserCollection, 'calificacionDeEmpleadosAEmpleador',).catchError((e)=>print(e));
+    calificacionesAEmpleador=result.documents
+        .map((doc) => CalificacionDeEmpleadoAEmpleador.fromMap(doc.data, doc.documentID))
+        .toList();
+    return calificacionesAEmpleador;
   }
 
 }

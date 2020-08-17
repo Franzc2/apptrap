@@ -24,6 +24,7 @@ class EditarExpProfesionalPage extends StatefulWidget {
 
 class _EditarExpProfesionalPageState extends State<EditarExpProfesionalPage> {
 
+  bool guardandoInformacion=false;
   String fechaInicioFire;
   String fechaFinFire;
 
@@ -237,6 +238,7 @@ class _EditarExpProfesionalPageState extends State<EditarExpProfesionalPage> {
               validator: validateFunciones,
             ),
             SizedBox(height: 15,),
+            guardandoInformacion?(Center(child: CircularProgressIndicator(),)):
             Container(
               child:
               RaisedButton(
@@ -245,6 +247,9 @@ class _EditarExpProfesionalPageState extends State<EditarExpProfesionalPage> {
                 Text("Guardar",style: TextStyle(fontSize: 18,color: Colors.white),),
                 onPressed: ()async{
                   if (keyForm.currentState.validate()) {
+                    setState(() {
+                      guardandoInformacion=true;
+                    });
                     print("empresa ${empresaCtrl.text}");
                     print("cargo ${cargoCtrl.text}");
                     print("region ${regionCtrl.text}");
@@ -266,6 +271,9 @@ class _EditarExpProfesionalPageState extends State<EditarExpProfesionalPage> {
                         )
                     );
                     await loginState.cargarExperienciaProfesionalUser(widget.user.id);
+                    setState(() {
+                      guardandoInformacion=false;
+                    });
                     Navigator.pop(context);
                   }
                   else{

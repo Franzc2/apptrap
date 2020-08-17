@@ -5,6 +5,8 @@ import 'package:app/core/viewmodels/login_state.dart';
 import 'package:app/ui/views/detalles_publicacion_trabajo_page.dart';
 import 'package:app/ui/views/editar_publicacion_trabajo_page.dart';
 import 'package:app/ui/views/personal_information_page.dart';
+import 'package:app/ui/views/postulantes_ganadores_publicacion.dart';
+import 'package:app/ui/views/postulantes_publicacion_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -137,6 +139,7 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
                                       );
                                     }
                                     else{
+                                      print(propuestaPostulantesSnap);
                                       return Center(
                                         child: Text("Número de postulaciones: "+ propuestaPostulantesSnap.data.length.toString()),
                                       );
@@ -148,7 +151,7 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
                             ),
                           ),
                           onTap: (){
-                            this._scaffoldKey.currentState.showBottomSheet((context)=>_buildBottomSheet(context, infoUser.id, publicacionTrabajo.id));
+                            this._scaffoldKey.currentState.showBottomSheet((context)=>_buildBottomSheet(context, infoUser.id, publicacionTrabajo.id, publicacionTrabajo));
 //                              Navigator.push(context, MaterialPageRoute(builder: (_)=>DetallesPublicacionTrabajoPage(idPublicacionTrabajo: publicacionTrabajo.id,)));
                           },
                         ),
@@ -162,84 +165,14 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
         },
         ),
       )
-//      buildPublicaciones(context,publicacionesUser)
     );
   }
 
-
-
-//este codigo es para prueba------------------------------------------------------------------------------------------
-
-  Widget buildPublicaciones(BuildContext context, List<PublicacionTrabajoUser> publicacionesUser){
-    print('numero de publicaciones' + publicacionesUser.length.toString());
-    if(publicacionesUser.length==0){
-      return  Container(
-        child: ListView(
-          children: <Widget>[
-            SizedBox(height: 20,),
-            Center(
-              child: Text("Aun no publicaste trabajos."),
-            ),
-            SizedBox(height: 20,),
-            Center(
-              child: RaisedButton(
-                onPressed: (){
-//                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AgregarPublicacionTrabajoPage(user: widget.user,)));
-                },
-                child: Text("Añadir publicaciónn"),
-              ),
-            )
-
-          ],
-        ),
-      );
-    }else{
-      return Column(
-        children: publicacionesUser.map((publicacion)=> buildCardPublicacion(context,publicacion)).toList(),
-        mainAxisSize: MainAxisSize.max,
-//        verticalDirection: VerticalDirection.up,
-      );
-    }
-  }
-
-  Widget buildCardPublicacion(BuildContext context,PublicacionTrabajoUser publicacion){
-    return Card(
-      child: ListTile(
-        title: Text(
-          publicacion.titulo,
-          ),
-          subtitle: Text(publicacion.descripcion),
-        onTap: (){
-//          Navigator.push(context, MaterialPageRoute(builder: (context)=>EditarFormacionPage(user: widget.user,formacion: formacion,)));
-        },
-      ),
-    );
-  }
-  
-  Container _buildBottomSheet(BuildContext context, String idUser,String idPublicacionTrabajo){
+  Container _buildBottomSheet(BuildContext context, String idUser,String idPublicacionTrabajo, PublicacionTrabajoUser publicacionTrabajoUser){
     return Container(
-      height: 160,
+      height: 210,
       padding: EdgeInsets.only(top: 30.0,left: 8.0,right: 8.0),
       decoration: BoxDecoration(
-//        border: Border(
-//          top: BorderSide(
-//            width: 2.0,
-//            color: Colors.black54
-//          ),
-//          right: BorderSide(
-//              width: 2.0,
-//              color: Colors.black54
-//          ),
-//          left: BorderSide(
-//              width: 2.0,
-//              color: Colors.black54
-//          ),
-//          bottom: BorderSide(
-//              width: 2.0,
-//              color: Colors.black54
-//          ),
-//        ),
-//        borderRadius: BorderRadius.circular(8.0)
       ),
       child: ListView(
         children: <Widget>[
@@ -256,26 +189,25 @@ class _MisPublicacionesPageState extends State<MisPublicacionesPage> {
           ListTile(
             leading: Icon(Icons.people, color: Colors.green,),
             title: Text("Ver propuestas postulantes"),
+            onTap:(){
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>PostulantesPublicacionPage(publicacionTrabajoUser: publicacionTrabajoUser,)));
+            },
           ),
           Divider(height: 1.0,),
-//          Container(
-////            alignment: Alignment.center,
-//            child: RaisedButton.icon(
-//                onPressed: (){},
-//                icon: Icon(Icons.remove_red_eye) ,
-//                label: Text("Ver detalles publicación")),
-//          ),
-//          Container(
-//            alignment: Alignment.center,
-//            child: RaisedButton.icon(
-//                onPressed: (){},
-//                icon: Icon(Icons.people) ,
-//                label: Text("Ver propuestas postulantes")),
-//          )
+          ListTile(
+            leading: Icon(Icons.done, color: Colors.blueAccent,),
+            title: Text("Ver postulantes ganadores"),
+            onTap:(){
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>PostulantesGanadoresPublicacionPage(publicacionTrabajoUser: publicacionTrabajoUser,)));
+            },
+          ),
+          Divider(height: 1.0,),
         ],
       ),
     );
-    
+
   }
 
 

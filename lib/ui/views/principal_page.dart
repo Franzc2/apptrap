@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/ui/views/home_page.dart';
 import 'package:app/ui/views/login_page.dart';
 import 'package:app/core/viewmodels/login_state.dart';
+import 'package:app/ui/views/onboarding_page.dart';
 
 class PrincipalPage extends StatefulWidget {
   PrincipalPage({Key key}) : super(key: key);
@@ -143,6 +144,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           if(state.isLoggedIn()){
             return HomePage();
           }else{
+//            return OnboardingPage();
             return LoginPage();
           }
         }

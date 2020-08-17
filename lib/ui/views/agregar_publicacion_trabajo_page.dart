@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:app/core/models/categoriaPublicacionModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
-import 'package:app/ui/views/info_para_destacar_publicacion_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,9 +13,10 @@ import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart' as Path;
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-import 'info_para resaltar2.dart';
+import 'info_para_destacar_publicacion1_page.dart';
 
 
 
@@ -100,17 +103,24 @@ class FormPublicarTrabajo extends StatefulWidget {
 
 class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
 
-  bool _loading=false;
+  bool _loading=false; //marca al cargar las subcategorias
   List<Categoria> _categorias=[];
   crudModel _crudCategorias=new crudModel();
   List<String> _subcategorias=[];
   List<DropdownMenuItem<String>> _dropDownMenuSubcategorias;
   String _btnSelectSubCategoria;
-  List<String> urlsImagesParaDestacarPublicacion=[];
+  String urlImagePublicacion="";
+  String urlImageComprobantePago="";
+//  List<String> urlsImagesParaDestacarPublicacion=[];
+  List<File> imagesParaDestacarPublicacion=[];
+  bool cargarDatosPublicacion=false;
 
   static const menuRazonDePago=<String>[
     'Por trabajo finalizado',
-    'Por horas de trabajo'
+    'Por horas de trabajo',
+    'Jornal',
+    'Fijo',
+    'Quincenal'
   ];
 
   static const menuModalidadDeTrabajo=<String>[
@@ -130,7 +140,7 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
       .map(
           (String value)=>DropdownMenuItem<String>(
         value: value,
-        child: Text(value),
+            child: Text(value),
       )).toList();
 
   String _btnSelectRazonDePago;
@@ -287,17 +297,6 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                   controller: habilidadesNecesariasCtrl,
                   validator: validateHabilidades,
                 ),
-//                SizedBox(height: 15,),
-//                TextFormField(
-//                  decoration: const InputDecoration(
-//                      labelText: "Lugar de Trabajo",
-//                      border: OutlineInputBorder()
-//                  ),
-//                  keyboardType:TextInputType.text ,
-//                  textCapitalization: TextCapitalization.sentences,
-//                  controller: lugarTrabajoCtrl,
-//                  validator: validateLugarTrabajo,
-//                ),
                 SizedBox(height: 15,),
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
@@ -383,19 +382,26 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                       child: Column(
                         children: <Widget>[
                           Text("Quieres que tu publicación sea mas visible?"),
-//                          OutlineButton.icon(
-//                              onPressed: (){
-//                                Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoParaDestacarPublicacionPage()));
-//                              },
-//                              icon: Icon(Icons.star_border),
-//                              label: Text("Destacar publicación.")),
                           OutlineButton.icon(
                               onPressed: () async{
-                                urlsImagesParaDestacarPublicacion = await Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoParaDestacarPublicacionPage1()));
-                                print(urlsImagesParaDestacarPublicacion);
+                                var result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoParaDestacarPublicacionPage1(imagesParaDestacarPublicacion: imagesParaDestacarPublicacion,)));
+                                if(result!=null){
+                                  imagesParaDestacarPublicacion=result;
+                                  print(imagesParaDestacarPublicacion[0].path);
+                                  print(imagesParaDestacarPublicacion[1].path);
+                                }
                               },
-                              icon: urlsImagesParaDestacarPublicacion.length==0?Icon(Icons.star_border):Icon(Icons.star,color: Colors.amber,),
-                              label: urlsImagesParaDestacarPublicacion.length==0?Text("Destacar publicación"):Text("Publicación destacada!"))
+                              icon: imagesParaDestacarPublicacion.length==0 || imagesParaDestacarPublicacion==null?Icon(Icons.star_border):Icon(Icons.star,color: Colors.amber,),
+                              label: imagesParaDestacarPublicacion.length==0 || imagesParaDestacarPublicacion==null?Text("Destacar publicación"):Text("Publicación destacada!")),
+                          imagesParaDestacarPublicacion.length>0?
+                            RaisedButton(color: Colors.blueAccent,
+                              child: Text("Cancelar publicacion destacada",style: TextStyle(color: Colors.white),),
+                              onPressed: (){
+                                setState(() {
+                                  imagesParaDestacarPublicacion=[];
+                                });
+                              },
+                            ):Container()
                         ],
                       ),
                     ),
@@ -405,20 +411,23 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                 ),
                 Divider(),
                 SizedBox(height: 15,),
+                cargarDatosPublicacion==true? Container(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ):
                 Container(
                   child:
                   RaisedButton(
                     color: Color.fromRGBO(63, 81, 181, 1),
                     child: Text("Publicar",style: TextStyle(fontSize: 18,color: Colors.white),),
                     onPressed: ()async{
-                      String url1="";
-                      String url2="";
-                      if(urlsImagesParaDestacarPublicacion.length>0){
-                        url1=urlsImagesParaDestacarPublicacion[0];
-                        url2=urlsImagesParaDestacarPublicacion[1];
-                      }
+
 
                       if (keyForm.currentState.validate()) {
+                        setState(() {
+                          cargarDatosPublicacion=true;
+                        });
                         print("categoria ${widget.nombrecategoria}");
                         print("que necesita ${_btnSelectSubCategoria}");
                         print("titulo ${tituloCtrl.text}");
@@ -428,6 +437,11 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                         print("fecha limite ${fechaLimiteCtrl.text}");
                         print("lugar de trabajo ${lugarTrabajoCtrl.text}");
 //                      keyForm.currentState.reset();
+
+                        if(imagesParaDestacarPublicacion.length>0){
+                          await subirImagenes(imagesParaDestacarPublicacion);
+                        }
+
 
                         await crudProvider.addPublicacionUser(
                             infoUser.id,
@@ -442,20 +456,23 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
                               fechaLimite: Timestamp.fromDate(DateTime.parse(fechaLimiteFire)),
                               fechaCreacion: Timestamp.fromDate(DateTime.now()),
                               fechaCreacionAlgolia: Timestamp.now().seconds,
-                              nivelImportancia: 0,
+                              nivelImportancia: 1,
                               estadoPublicacionTrabajo: "Evaluando propuestas",
-//                              lugarTrabajo: lugarTrabajoCtrl.text
                               modalidadDeTrabajo: _btnSelectModalidadDeTrabajo,
-                              urlImagePublicacion: url1,
-                              urlImageComprobantePago: url2
+                              urlImagePublicacion: urlImagePublicacion,
+                              urlImageComprobantePago: urlImageComprobantePago
                             ),
                           infoUser
                         );
+                        setState(() {
+                          cargarDatosPublicacion=false;
+                        });
                         Navigator.popUntil(context, ModalRoute.withName('/misPublicaciones'));
                       }
                       else{
                         print("El formulario tiene errores");
                       }
+
                     },
                     padding: EdgeInsets.all(10),
                   ),
@@ -541,7 +558,27 @@ class _FormPublicarTrabajoState extends State<FormPublicarTrabajo> {
   }
 
 
+  Future subirImagenes(List<File> images) async{
 
+    StorageReference storageReference1 = FirebaseStorage.instance.ref().child(Path.basename(imagesParaDestacarPublicacion[0].path));
+    StorageUploadTask uploadTask1 = storageReference1.putFile(imagesParaDestacarPublicacion[0]);
+    await uploadTask1.onComplete;
+//    await uploadTask1.onComplete;
+    print('File Uploaded');
+    await storageReference1.getDownloadURL().then((fileURL) {
+      urlImagePublicacion=fileURL;
+      print("url imagen publicacion"+ urlImagePublicacion);
+    });
+
+
+    StorageReference storageReference2 = FirebaseStorage.instance.ref().child(Path.basename(imagesParaDestacarPublicacion[1].path));
+    StorageUploadTask uploadTask2 = storageReference2.putFile(imagesParaDestacarPublicacion[1]);
+    await uploadTask2.onComplete;
+    await storageReference2.getDownloadURL().then((fileURL) {
+      urlImageComprobantePago = fileURL;
+      print("url imagen publicacion"+ urlImageComprobantePago);
+    });
+  }
 
 
 

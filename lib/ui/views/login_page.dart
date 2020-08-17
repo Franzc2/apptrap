@@ -32,27 +32,31 @@ class _LoginPageState extends State<LoginPage> {
     final loginState= Provider.of<LoginState>(context);
 
     // TODO: implement build
-    return new Scaffold(
-      body: ListView(
+    return
+      new Scaffold(
+      body:
+      ListView(
         children: <Widget>[
-          SizedBox(
-            height: 80.0,
-          ),
-          Center(
-            child: Text("Trabajos Bolivia",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-          ),
-
           Container(
-            padding: EdgeInsets.all(20),
-            child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Text("Te ayudamos a encontrar un trabajo mejor",textAlign: TextAlign.center,style: Style01,),
-                    Text("Haz que tu currículum sea visible para miles de empresas",textAlign: TextAlign.center,style: Style01,)
-                  ],
-                )
-            ),
+            child: Image.asset("assets/images/loginbackg.png"),
           ),
+//          SizedBox(
+//            height: 80.0,
+//          ),
+//          Center(
+//            child: Text("Trabajos Bolivia",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+//          ),
+//          Container(
+//            padding: EdgeInsets.all(20),
+//            child: Center(
+//                child: Column(
+//                  children: <Widget>[
+//                    Text("Te ayudamos a encontrar un trabajo mejor",textAlign: TextAlign.center,style: Style01,),
+//                    Text("Haz que tu currículum sea visible para miles de empresas",textAlign: TextAlign.center,style: Style01,)
+//                  ],
+//                )
+//            ),
+//          ),
 
           Column(
             children: <Widget>[
@@ -161,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: 150,
+                      height: 80,
                     ),
                   ],
                 ),

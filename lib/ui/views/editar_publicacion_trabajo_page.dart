@@ -1,15 +1,21 @@
+import 'dart:io';
+
 import 'package:app/core/models/categoriaPublicacionModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/core/models/userModel.dart';
 import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
-import 'package:app/ui/views/curriculum_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
+
+import 'info_para_destacar_publicacion2_page.dart';
 
 class EditarPublicacionTrabajoPage extends StatefulWidget {
   final PublicacionTrabajoUser publicacionTrabajo;
@@ -29,6 +35,8 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
   List<String> _subcategorias=[];
   List<DropdownMenuItem<String>> _dropDownMenuSubcategorias;
   String _btnSelectSubCategoria;
+//  List<File> imagesParaDestacarPublicacion=[];
+  Map urlsImagesParaDestacarPublicacion;
 
   static const menuRazonDePago=<String>[
     'Por trabajo finalizado',
@@ -117,7 +125,7 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
     super.dispose();
   }
 
-  cargarDatos(){
+  cargarDatos()async{
     _btnSelectSubCategoria=widget.publicacionTrabajo.nombreSubcategoria;
     tituloCtrl.text=widget.publicacionTrabajo.titulo;
     descripcionCtrl.text=widget.publicacionTrabajo.descripcion;
@@ -128,6 +136,7 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
     presupuestoCtrl.text=widget.publicacionTrabajo.presupuesto.toString();
     fechaLimiteCtrl.text=formatFechaTextField.format(widget.publicacionTrabajo.fechaLimite.toDate());
     fechaLimiteFire=formatFechaForFire.format(widget.publicacionTrabajo.fechaLimite.toDate());
+
   }
 
 
@@ -218,17 +227,7 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
                   controller: habilidadesNecesariasCtrl,
                   validator: validateHabilidades,
                 ),
-//                SizedBox(height: 15,),
-//                TextFormField(
-//                  decoration: const InputDecoration(
-//                      labelText: "Lugar de Trabajo",
-//                      border: OutlineInputBorder()
-//                  ),
-//                  keyboardType:TextInputType.text ,
-//                  textCapitalization: TextCapitalization.sentences,
-//                  controller: lugarTrabajoCtrl,
-//                  validator: validateLugarTrabajo,
-//                ),
+
                 SizedBox(height: 15,),
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
@@ -300,6 +299,50 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
                   validator: validateFechaLimite,
                 ),
                 SizedBox(height: 15,),
+//                Divider(),
+//                Padding(
+//                  padding: const EdgeInsets.all(8.0),
+//                  child: Text("Opcional",style: TextStyle(
+//                    fontWeight: FontWeight.bold,
+//                    color:Colors.indigoAccent,
+//                  ),),
+//                ),
+//                Container(
+//                  child: Card(
+//                    child: Padding(
+//                      padding: const EdgeInsets.all(8.0),
+//                      child: Column(
+//                        children: <Widget>[
+//                          Text("Quieres que tu publicación sea mas visible?"),
+//                          OutlineButton.icon(
+//                              onPressed: () async{
+//                                var result = await Navigator.push(context, MaterialPageRoute(builder: (context)=>InfoParaDestacarPublicacionPage2(urlsImagesParaDestacarPublicacion: urlsImagesParaDestacarPublicacion,)));
+//                                if(result!=null){
+//                                  urlsImagesParaDestacarPublicacion=result;
+////                                  print(imagesParaDestacarPublicacion[0].path);
+////                                  print(imagesParaDestacarPublicacion[1].path);
+//                                }
+//                              },
+//                              icon: urlsImagesParaDestacarPublicacion.length==0 || urlsImagesParaDestacarPublicacion==null?Icon(Icons.star_border):Icon(Icons.star,color: Colors.amber,),
+//                              label: urlsImagesParaDestacarPublicacion.length==0 || urlsImagesParaDestacarPublicacion==null?Text("Destacar publicación"):Text("Publicación destacada!")),
+//                          urlsImagesParaDestacarPublicacion.length>0?
+//                          RaisedButton(color: Colors.blueAccent,
+//                            child: Text("Cancelar publicacion destacada",style: TextStyle(color: Colors.white),),
+//                            onPressed: (){
+//                              setState(() {
+//                                urlsImagesParaDestacarPublicacion={};
+//                              });
+//                            },
+//                          ):Container()
+//                        ],
+//                      ),
+//                    ),
+//                    elevation: 2.0,
+//                  ),
+//
+//                ),
+//                Divider(),
+//                SizedBox(height: 15,),
                 Container(
                   child:
                   RaisedButton(
@@ -328,9 +371,12 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
                                 presupuesto: int.parse(presupuestoCtrl.text.replaceAll(",", "")),
                                 fechaLimite: Timestamp.fromDate(DateTime.parse(fechaLimiteFire)),
                                 fechaCreacion: widget.publicacionTrabajo.fechaCreacion,
-                                nivelImportancia: 0,
-                                estadoPublicacionTrabajo: "Evaluando propuestas",
-                                modalidadDeTrabajo: lugarTrabajoCtrl.text
+                                nivelImportancia: widget.publicacionTrabajo.nivelImportancia,
+                                estadoPublicacionTrabajo: widget.publicacionTrabajo.estadoPublicacionTrabajo,
+                                modalidadDeTrabajo: lugarTrabajoCtrl.text,
+                              urlImageComprobantePago: widget.publicacionTrabajo.urlImageComprobantePago,
+                              urlImagePublicacion: widget.publicacionTrabajo.urlImagePublicacion,
+                              fechaCreacionAlgolia: widget.publicacionTrabajo.fechaCreacionAlgolia
                             )
                         );
 //                        Navigator.popUntil(context, ModalRoute.withName('/misPublicaciones'));
@@ -423,4 +469,6 @@ class _EditarPublicacionTrabajoPageState extends State<EditarPublicacionTrabajoP
     }
     return null;
   }
+
+
 }

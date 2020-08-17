@@ -172,4 +172,28 @@ class _DetallesPublicacionTrabajoPageState extends State<DetallesPublicacionTrab
 
     );
   }
+
+
+  Widget cardImagen(String _urlImage){
+    return
+      Center(
+        child: Container(
+          child: Card(
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+//                    child: Image.file(_imageFileDeposito,fit: BoxFit.cover,)
+                    child: Image.network(_urlImage)
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
+          ),
+          height: 200,
+          width: 200,
+        ),
+      );
+  }
+
+
 }

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:app/core/models/formacionModel.dart';
 import 'package:app/ui/views/agregar_formacion_page.dart';
+import 'package:date_format/date_format.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -102,7 +103,9 @@ class _CurriculumPageState extends State<CurriculumPage> {
               estadoCuenta: widget.user.estadoCuenta,
               urlDocumentCurriculum: "",
               idiomas: widget.user.idiomas,
-              nameDocCurriculum: ""
+              nameDocCurriculum: "",
+              geoPoint: widget.user.geoPoint,
+              token: widget.user.token
           ),
           widget.user.id
       );
@@ -150,7 +153,9 @@ class _CurriculumPageState extends State<CurriculumPage> {
                 estadoCuenta: widget.user.estadoCuenta,
                 urlDocumentCurriculum: url,
                 idiomas: widget.user.idiomas,
-                nameDocCurriculum: fileNameDoc
+                nameDocCurriculum: fileNameDoc,
+                token: widget.user.token,
+                geoPoint: widget.user.geoPoint
             ),
             widget.user.id
         );
@@ -309,7 +314,6 @@ class _CurriculumPageState extends State<CurriculumPage> {
                         }
                       }
                   ),
-
                   SizedBox(height: 10.0,),
                 ],
               ),
@@ -344,37 +348,6 @@ class _CurriculumPageState extends State<CurriculumPage> {
       ),
     );
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   Widget buildCardExpProf(BuildContext context,ExpProfesional expProfesional){
     return Card(

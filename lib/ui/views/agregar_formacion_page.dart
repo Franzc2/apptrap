@@ -20,7 +20,7 @@ class AgregarFormacionPage extends StatefulWidget {
 
 class _AgregarFormacionPageState extends State<AgregarFormacionPage> {
 
-  final bool cargando=false;
+  bool guardandoInformacion=false;
   String fechaInicioFire="";
   String fechaFinFire="";
 
@@ -232,6 +232,7 @@ class _AgregarFormacionPageState extends State<AgregarFormacionPage> {
             ),
 
             SizedBox(height: 15,),
+            guardandoInformacion? (Center(child: CircularProgressIndicator(),)):
             Container(
               child:
               RaisedButton(
@@ -239,6 +240,9 @@ class _AgregarFormacionPageState extends State<AgregarFormacionPage> {
                 child: Text("Guardar",style: TextStyle(fontSize: 18,color: Colors.white),),
                 onPressed: ()async{
                   if (keyForm.currentState.validate()) {
+                    setState(() {
+                      guardandoInformacion=true;
+                    });
                     print("institucion ${institucionCtrl.text}");
                     print("nivel studios ${_btnSelectNivelEstudios}");
                     print("estado actual ${_btnSelectEstadoActual}");
@@ -257,6 +261,9 @@ class _AgregarFormacionPageState extends State<AgregarFormacionPage> {
                         )
                     );
                     await loginState.cargarFormacionUser(widget.user.id);
+                    setState(() {
+                      guardandoInformacion=false;
+                    });
                     Navigator.pop(context);
                   }
                   else{

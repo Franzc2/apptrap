@@ -1,20 +1,22 @@
-import 'package:app/ui/views/buscar_empleos_page.dart';
+
+import 'dart:ui';
+
+import 'package:algolia/algolia.dart';
+import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
+import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/ui/views/curriculum_page.dart';
-import 'package:app/ui/views/mis_publicaciones_page.dart';
 import 'package:app/ui/views/search_publications_by_categories_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:app/core/viewmodels/crudModel.dart';
 import 'package:app/core/viewmodels/login_state.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:app/ui/views/personal_information_page.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-
+import 'detalles_publicacion_trabajo_para_postulantes_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -28,11 +30,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  List<AlgoliaObjectSnapshot> _results;
+  bool _searching = false;
+  var format = DateFormat.yMd('es').add_jm();
+
+
+  _search() async {
+    setState(() {_searching = true;});
+
+    Algolia algolia = Algolia.init(
+      applicationId: 'CA8N1B30DY',
+      apiKey: '484882b03fe047f42fb9ccbc998ad21d',
+    );
+    AlgoliaQuery query = algolia.instance.index('publicaciones');
+    query=query.setFilters("nivelImportancia>1");
+    _results = (await query.getObjects()).hits;
+    setState(() {_searching = false;});
+  }
 
   @override
   void initState() {
     super.initState();
-
+    _search();
   }
 
   @override
@@ -41,34 +60,23 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
-
-    final crudProvider=Provider.of<crudModel>(context);
     final infoUser=Provider.of<LoginState>(context).infoUser();
-    final infoUserFirebase=Provider.of<LoginState>(context).getUserFirebase();
     final loginState=Provider.of<LoginState>(context);
 
     // TODO: implement build
     final drawerHeader = UserAccountsDrawerHeader(
       decoration: BoxDecoration(
           color: Color.fromRGBO(63, 81, 181, 1.0),
-
       ),
       accountName: Text(infoUser.nombreCompleto),
       accountEmail: Text(infoUser.correoElectronico),
       currentAccountPicture:
       CircleAvatar(
         child:
-//        backgroundImage: NetworkImage(infoUser.urlImagePerfil),
-//        radius: 30,
-//        backgroundColor: Colors.transparent,
-
         ClipOval(
           child:FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: infoUser.urlImagePerfil,height: 65,width: 65,fit: BoxFit.cover,)
-//          Image.network(infoUser.urlImagePerfil),
         ),
       ),
     );
@@ -87,7 +95,6 @@ class _HomePageState extends State<HomePage> {
           title: Text('Mi currículum'),
           onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=> CurriculumPage(user: infoUser,)));
-//            Navigator.pushNamed(context, '/curriculumPage');
           },
         ),
         ListTile(
@@ -142,12 +149,126 @@ class _HomePageState extends State<HomePage> {
           ),
           centerTitle: true,
         ),
-//        body:buildCategorias(),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Card(
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        child: Image.asset("assets/logos/logoMiEmpleoBlanco01.png",width: 70.0,fit: BoxFit.cover,),
+                        padding: EdgeInsets.only(left: 20,right: 15,top: 0,bottom: .0),
+                      ),
+                      Expanded(
+                        child: Container(
+                          child: Text("Encuentra un nuevo trabajo, únete al equipo",style: TextStyle(fontSize: 15,fontWeight:FontWeight.w600,color:Colors.white),),
+                          padding: EdgeInsets.only(right: 25.0),
+                        ),
+                      ),
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+
+                  height: 90.0,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image:AssetImage("assets/images/fondo01.jpg"),
+                          fit:BoxFit.cover,
+                          colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken)
+                      )
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+              ),
+
+              Container(
+                child: Text("Publicaciones destacadas",style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.w600,color: Colors.black87),),
+                padding: EdgeInsets.only(right: 15,left: 15,bottom: 5,top: 12),
+              ),
+              //Divider(height: 1.0,),
+              Expanded(
+                child: _searching == true
+                    ? Center(
+                  child: Text("Cargando, espere por favor..."),
+                )
+                    :_results==null
+                    ?Center()
+                    : _results.length == 0
+                    ? Center(
+                  child: Text("No se encontraron resultados."),
+                )
+                :
+                GridView.builder(
+                  padding: EdgeInsets.all(8.0),
+                  itemCount: _results.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 0.0, mainAxisSpacing: 0.0),
+                  itemBuilder: (BuildContext ctx, int index){
+                    AlgoliaObjectSnapshot snap=_results[index];
+                    PublicacionTrabajoAlgolia publicacion=PublicacionTrabajoAlgolia.fromJson(snap.data, snap.objectID);
+                    return cardVistaPreviaConImagen(publicacion);
+                  }
+                )
+//                    Row(
+//                      children:_results.map((algoliaPublicacion)=>cardVistaPreviaConImagen(algoliaPublicacion)).toList(),
+//                    )
+
+ //               ListView.builder(
+ //                 itemCount: _results.length,
+ //                 itemBuilder: (BuildContext ctx, int index) {
+ //                   AlgoliaObjectSnapshot snap = _results[index];
+ //                   PublicacionTrabajoAlgolia publicacion=PublicacionTrabajoAlgolia.fromJson(snap.data,snap.objectID);
+ //                   return cardVistaPreviaConImagen(publicacion);
+ //                 },
+ //               ),
+              ),
+
+            ],
+          ),
+        ),
         drawer: Drawer(
           child: drawerItems,
         ));
   }
 
+  Widget cardVistaPreviaConImagen(PublicacionTrabajoAlgolia publicacion){
+    return
+    Container(
+          child: Card(
+            child:
+                InkWell(
+                  child:
+                  Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                          child: Image.network(publicacion.urlImagePublicacion,fit: BoxFit.cover,)
+                      ),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child:
+                        Container(
+                          child: Center(
+                            child: Text(publicacion.nombreCategoria,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),textAlign: TextAlign.center,maxLines: 2,),
+                          ),
+                          height: 40,
+                          color: Colors.black54,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=> DetallesPublicacionTrabajoParaPostulantesPage(publicacionTrabajoAlgolia:publicacion,)));
+                  },
+                ),
+            clipBehavior: Clip.antiAlias,
+
+          ),
+
+//          height: 150, width: 150,
+        );
+  }
 
   Widget buildCategorias(){
     return ListView(
@@ -191,53 +312,3 @@ class _HomePageState extends State<HomePage> {
   }
 
 }
-
-
-// <Null> means this route returns nothing.
-class _NewPage extends MaterialPageRoute<Null> {
-  _NewPage(int id)
-      : super(builder: (BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Page $id'),
-        elevation: 1.0,
-      ),
-      body:
-      Center(
-        child: Text('Page $id'),
-      ),
-    );
-  });
-}
-
-//List<User> users;
-//Container(
-//child: StreamBuilder(
-//stream: userProvider.fetchUsersAsStream(),
-//builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//if (snapshot.hasData) {
-//users = snapshot.data.documents
-//    .map((doc) => User.fromMap(doc.data, doc.documentID))
-//    .toList();
-//return ListView.builder(
-//itemCount: users.length,
-//itemBuilder: (buildContext, index) =>
-//_UserCard(userDetails: users[index]),
-//);
-//} else {
-//return Text('fetching');
-//}
-//}
-//),
-//),
-//
-//Widget _UserCard({User userDetails}){
-//  return Card(
-//    child: Column(
-//      children: <Widget>[
-//        Text(userDetails.nombreCompleto),
-//        Text(userDetails.id)
-//      ],
-//    ),
-//  );
-//}
