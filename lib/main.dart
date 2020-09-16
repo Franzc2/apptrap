@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          // ChangeNotifierProvider sirve para escuchar cuando el usuario cambia de logueado a no logueado
           ChangeNotifierProvider(create: (_)=>LoginState()),
           ChangeNotifierProvider(create: (_)=>locator<crudModel>()),
         ],
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
                 supportedLocales: [
                   const Locale('en'), // Inglés
                   const Locale('es'), // Español
-//                  const Locale.fromSubtags(languageCode: 'zh'), // Chino *Mira Localizaciones avanzadas más abajo*
+//                  const Locale.fromSubtags(languageCode: 'zh'), // *Mirar Localizaciones avanzadas más abajo*
                   // ... otras regiones que la app soporte
                 ],
                 debugShowCheckedModeBanner: false,

@@ -147,6 +147,15 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
+          actions: <Widget>[
+            IconButton
+              (icon: Icon(Icons.refresh),
+                onPressed: (){setState(() {
+            _search();
+            });},
+
+            )
+          ],
           centerTitle: true,
         ),
         body: Container(

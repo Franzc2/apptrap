@@ -93,7 +93,7 @@ flutter:
     - assets/images/onboarding6.png
     - assets/images/onboarding7.gif
     - assets/images/onboarding10.gif
-#    - assets/images/logo.png
+  #  - assets/images/logo.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

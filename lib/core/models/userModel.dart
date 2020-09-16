@@ -5,6 +5,7 @@ class User{
   String id;
   String nombreCompleto;
   String numCI;
+  String extCi;
   String ciudadRecidencia;
   String telefonoCelular;
   String correoElectronico;
@@ -23,6 +24,7 @@ class User{
     this.id,
     this.nombreCompleto,
     this.numCI,
+    this.extCi,
     this.ciudadRecidencia,
     this.telefonoCelular,
     this.correoElectronico,
@@ -41,6 +43,7 @@ class User{
       id=id ?? '',
       nombreCompleto=snapshot['nombreCompleto'] ?? '',
       numCI=snapshot['numCI'] ?? '',
+      extCi= snapshot['extCi'] ?? '',
       ciudadRecidencia=snapshot['ciudadRecidencia'] ?? '',
       telefonoCelular=snapshot['telefonoCelular'] ?? '',
       correoElectronico=snapshot['correoElectronico'] ?? '',
@@ -59,6 +62,7 @@ class User{
     return {
     "nombreCompleto": nombreCompleto,
     "numCI": numCI,
+    "extCi": extCi,
     "ciudadRecidencia": ciudadRecidencia,
     "telefonoCelular": telefonoCelular,
     "correoElectronico": correoElectronico,

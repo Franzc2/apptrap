@@ -34,6 +34,7 @@ class _DetallesPostulacionPageState extends State<DetallesPostulacionPage> {
   var formatFechaNacimiento = DateFormat.yMMMMd('es');
   var formatHora = DateFormat.jm();
   bool _cargandoChat=false;
+  List<PropuestaPostulante> propuestas;
 
 
   @override
@@ -194,7 +195,7 @@ class _DetallesPostulacionPageState extends State<DetallesPostulacionPage> {
 //                          label: Text("Calificar a Empleador",style: TextStyle(color: Colors.white),),
 //                          color: Colors.blue,
 //                        ):
-                        Text("Calificacion a usuario: "+widget.propuestaPostulante.calificacionAPostulanteGanador .toString()+"/10", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),):null,
+                        Text("Mi calificación: "+widget.propuestaPostulante.calificacionAPostulanteGanador .toString()+"/10", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),):null,
                       ),
                     ),
                     Card(
@@ -206,6 +207,28 @@ class _DetallesPostulacionPageState extends State<DetallesPostulacionPage> {
                             radius: 25.0,
                           ),
                           title: Text(userPostulante.nombreCompleto),
+                          subtitle: FutureBuilder(
+                              future: _crud.getPostulaciones(userPostulante.id),
+                              builder: (context, postulacionesSnap){
+                                if(postulacionesSnap.connectionState==ConnectionState.waiting){
+                                  return Center(
+                                    child: Text("Cargando..."),
+                                  );
+                                }
+                                else{
+                                  propuestas=postulacionesSnap.data;
+                                  num numeroDeCalificaciones=0;
+                                  num sumaCalificaciones=0;
+                                  propuestas.asMap().forEach(( i, propuesta){
+                                    if(propuesta.calificacionAPostulanteGanador!=0 && propuesta.estadoPostulacion=="1"){
+                                      numeroDeCalificaciones++;
+                                      sumaCalificaciones=sumaCalificaciones+propuesta.calificacionAPostulanteGanador;
+                                    }
+                                  });
+                                  return numeroDeCalificaciones==0?Text("Calificación como empleado: Sin calificaciones") :Text("Calificaión como empleado: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
+                                }
+                              }
+                          ),
                           trailing:Column(
                             children: <Widget>[
                               Container(

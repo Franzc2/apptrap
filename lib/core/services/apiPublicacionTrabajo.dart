@@ -6,7 +6,7 @@ class ApiPublicacionTrabajo{
   final String path;
   CollectionReference ref;
 
-  ApiPublicacionTrabajo(this.path){
+  ApiPublicacionTrabajo(this.path){ //this.path=> publicaciones
     ref=_db.collection(path);
   }
 

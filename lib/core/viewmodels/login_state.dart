@@ -27,6 +27,7 @@ class LoginState with ChangeNotifier{
   SharedPreferences _prefs;
   final crudModel userCrud=new crudModel();
 
+  // primero definimos un objeto de tipo Login para consumir
   final TwitterLogin _twitterLogin= new TwitterLogin(
     consumerKey: TWITTER_API,
     consumerSecret: TWITTER_SECRET
@@ -35,7 +36,6 @@ class LoginState with ChangeNotifier{
   User user=new User(urlImagePerfil: '',nombreCompleto: '',correoElectronico: '',id: '');
   List<ExpProfesional> _expProfUser=[];
   List<Formacion> _formacionUser=[];
-
 
   FirebaseUser _user;
   bool _loggedIn = false;
@@ -56,7 +56,7 @@ class LoginState with ChangeNotifier{
   List<ExpProfesional> expProfUser()=>_expProfUser;
   List<Formacion> formacionUser()=>_formacionUser;
 
-
+  ///////
   void login(LoginProvider loginProvider) async{
     _loading = true;
     notifyListeners();
@@ -71,6 +71,8 @@ class LoginState with ChangeNotifier{
         _user =await _handleTwitterSignIn().catchError((e){ print(e); _loading=false;});
         break;
     }
+
+    /// condicion para user logueado
     _loading = false;
     if(_user != null){
       _prefs.setBool('isLoggedIn', true);
@@ -94,6 +96,7 @@ class LoginState with ChangeNotifier{
 
     notifyListeners();
   }
+
   limpiarUser(){
     user.id='';
     user.urlImagePerfil='';
@@ -185,7 +188,8 @@ class LoginState with ChangeNotifier{
     print("uid"+ user.uid);
     return user;
   }
-  Future<FirebaseUser> _handleFacebookSignIn() async{
+    /// obtener credecial de FACEBOOK
+    Future<FirebaseUser> _handleFacebookSignIn() async{
     final result= await _facebookSignIn.logIn(['email']);
     if (result.status != FacebookLoginStatus.loggedIn){
       return null;
@@ -201,9 +205,9 @@ class LoginState with ChangeNotifier{
     print("correo"+ user.email);
     return user;
   }
-
+  //obtenemos el credencial TWITTER
   Future<FirebaseUser> _handleTwitterSignIn() async{
-    var twiterResult = await _twitterLogin.authorize();
+    var twiterResult = await _twitterLogin.authorize(); // maneja toda la logica para menejar el usuario
     if(twiterResult.status != TwitterLoginStatus.loggedIn){
       return null;
     }
@@ -218,12 +222,11 @@ class LoginState with ChangeNotifier{
     print("signed in " + user.displayName);
     return user;
   }
-
+  /// fin de future Twitter
 
   void loginState()async{
     _loading=true;
     _prefs= await SharedPreferences.getInstance();
-
     if(_prefs.containsKey('isLoggedIn')){
       _user=await _auth.currentUser();
       _loggedIn= _user !=null;

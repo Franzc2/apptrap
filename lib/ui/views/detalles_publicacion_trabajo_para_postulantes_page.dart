@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app/core/models/calificacionDeEmpleadoAEmpleador.dart';
 import 'package:app/core/models/chatModel.dart';
 import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/userModel.dart';
@@ -27,6 +28,7 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
   var _formatPublicacion = DateFormat.yMMMd('es').add_jm();
   bool _cargandoChat=false;
   String sp='';
+  List<CalificacionDeEmpleadoAEmpleador> calificacionesAEmpleador;
 
   @override
   void initState() {
@@ -151,7 +153,29 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                                           Icon(Icons.location_on,color: Colors.black38,),
                                           Text(userPublicador.ciudadRecidencia)
                                         ],
-                                      )
+                                      ),
+                                      FutureBuilder(
+                                          future: _crud.getCalificacionesAEmpleador(userPublicador.id),
+                                          builder: (context, calificacionesAEmpleadorSnap){
+                                            if(calificacionesAEmpleadorSnap.connectionState==ConnectionState.waiting){
+                                              return Center(
+                                                child: Text("Cargando..."),
+                                              );
+                                            }
+                                            else{
+                                              calificacionesAEmpleador=calificacionesAEmpleadorSnap.data;
+                                              num numeroDeCalificaciones=0;
+                                              num sumaCalificaciones=0;
+                                              calificacionesAEmpleador.asMap().forEach(( i, calificacion){
+                                                if(calificacion.calificacionDeEmpleado !=0 ){
+                                                  numeroDeCalificaciones++;
+                                                  sumaCalificaciones=sumaCalificaciones+calificacion.calificacionDeEmpleado;
+                                                }
+                                              });
+                                              return numeroDeCalificaciones==0?Text("  Calificación de empleador: Sin calificaciones") :Text("  Calificación de empleador: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
+                                            }
+                                          }
+                                      ),
                                     ],
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                   ),

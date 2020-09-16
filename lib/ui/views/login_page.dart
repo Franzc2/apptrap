@@ -40,24 +40,6 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             child: Image.asset("assets/images/loginbackg.png"),
           ),
-//          SizedBox(
-//            height: 80.0,
-//          ),
-//          Center(
-//            child: Text("Trabajos Bolivia",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-//          ),
-//          Container(
-//            padding: EdgeInsets.all(20),
-//            child: Center(
-//                child: Column(
-//                  children: <Widget>[
-//                    Text("Te ayudamos a encontrar un trabajo mejor",textAlign: TextAlign.center,style: Style01,),
-//                    Text("Haz que tu currículum sea visible para miles de empresas",textAlign: TextAlign.center,style: Style01,)
-//                  ],
-//                )
-//            ),
-//          ),
-
           Column(
             children: <Widget>[
               Container(
@@ -67,26 +49,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text("Iniciar sesión", style: TextStyle(color: Colors.black87,fontSize: 20,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                       padding: EdgeInsets.all(20),
                     ),
-//                    Center(
-//                      child: SizedBox(
-//                          width: 270,
-//                          height: 40,
-//
-//                          child: OutlineButton(
-//                            onPressed: (){},
-//                            child: new Container(
-//                              child: Row(
-//                                children: <Widget>[
-//                                  Icon(Icons.person_outline),
-//                                  Text("Usar correo electronico"),
-//                                  Text("")
-//                                ],
-//                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                              ),
-//                            ),
-//                          )
-//                      ),
-//                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -94,7 +56,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox(
                           width: 270,
                           height: 40,
-
                           child: OutlineButton(
                             onPressed: (){
                               loginState.login(LoginProvider.FACEBOOK);

@@ -207,6 +207,12 @@ class _CurriculumPageState extends State<CurriculumPage> {
             ),
             //card Experiencia Laboral-------------------------------------------------------------------
             Card(
+                child: ListTile(
+                  leading: Icon(Icons.error_outline),
+                  title: Text('Recuerde que los datos que llene en esta sección se reflejarán como una Declaración Jurada',style: TextStyle(fontSize: 14.0, color: Colors.redAccent),),
+                )
+            ),
+            Card(
               child:Column(
                 children: <Widget>[
                   tituloCard("Experiencia profesional"),
@@ -252,7 +258,6 @@ class _CurriculumPageState extends State<CurriculumPage> {
                 children: <Widget>[
                   tituloCard("Curriculum adjunto"),
                   SizedBox( height: 5.0,),
-
                   new Builder(
                       builder:(BuildContext context){
                         if(_loadingPath==true){

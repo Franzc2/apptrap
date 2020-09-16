@@ -15,5 +15,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => ApiPublicacionTrabajo('publicaciones'));
   locator.registerLazySingleton(() => ApiChat('chats'));
   locator.registerLazySingleton(() => crudModel()) ;
-//  locator.registerSingleton(() => LoginState());
+//locator.registerSingleton(() => LoginState());
 }

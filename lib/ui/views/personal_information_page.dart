@@ -45,7 +45,25 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
   TextEditingController ciudadResienciaCtrl= new TextEditingController();
   TextEditingController telefonoCelularCtrl= new TextEditingController();
   TextEditingController correoElectronicoCtrl= new TextEditingController();
+  String _btnSelectExtensionCi;
 
+  static const menuExtensionCi=<String>[
+    'LP',
+    'CB',
+    'SC',
+    'PO',
+    'CH',
+    'TJ',
+    'PD',
+    'BN',
+    'OR'
+  ];
+  final List<DropdownMenuItem<String>> _dropDownMenuExtensionCi=menuExtensionCi
+      .map(
+          (String value)=>DropdownMenuItem<String>(
+           value: value,
+           child: Text(value),
+      )).toList();
 
   @override
   void initState() {
@@ -198,16 +216,13 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                 ),
               ),
               SizedBox(height: 10.0,),
-//            Container(
-//              child: Center(
-//                child: CircleAvatar(
-//                  radius: 40.0,
-//                  child: ClipOval( child: Image.network(widget.user.urlImagePerfil,width: 80,height: 80,fit: BoxFit.cover,),
-//                  ),
-//                ),
-//              ),
-//              padding: EdgeInsets.all(15),
-//            ),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.error_outline),
+                  title: Text('Recuerde que los datos que llene en esta sección se reflejarán como una Declaración Jurada',style: TextStyle(fontSize: 14.0, color: Colors.redAccent),),
+                )
+              ),
+              SizedBox(height: 10.0,),
               TextFormField(
                 decoration: const InputDecoration(
                     labelText: "Nombre completo",
@@ -228,6 +243,22 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                 controller: ciCtrl,
                 validator: validateCI,
                 keyboardType: TextInputType.text,
+              ),
+              SizedBox(height: 15,),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText:"Extension CI",
+                    contentPadding: EdgeInsets.only(top: 5,bottom: 5,right: 13,left: 13)
+                ),
+                value: _btnSelectExtensionCi,
+                onChanged: (String newValue){
+                  setState(() {
+                    _btnSelectExtensionCi=newValue;
+                  });
+                },
+                items: this._dropDownMenuExtensionCi,
+                validator:validateExtCi,
               ),
               SizedBox(height: 15,),
               TextFormField(
@@ -312,6 +343,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                       setState(() {subiendoInformacionAFirebase=true;});
                       print("Nombre ${nombreCtrl.text}");
                       print("CI ${ciCtrl.text}");
+                      print("Extension Ci ${_btnSelectExtensionCi}");
                       print("FechaNacimiento ${fechaNacimientoCtrl.text}");
                       print("CiudadResidencia ${ciudadResienciaCtrl.text}");
                       print("TelefonoCelular ${telefonoCelularCtrl.text}");
@@ -325,6 +357,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                           User(
                             nombreCompleto: nombreCtrl.text,
                             numCI: ciCtrl.text,
+                            extCi: _btnSelectExtensionCi,
                             fechaNacimiento: Timestamp.fromDate(fecha),
                             ciudadRecidencia: ciudadResienciaCtrl.text,
                             telefonoCelular: telefonoCelularCtrl.text,
@@ -343,7 +376,6 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                       await loginState.cargarInformacionPersonal(widget.user.id);
                       setState(() {subiendoInformacionAFirebase=false;});
                       Navigator.pop(context);
-
                     }
                     else{
                       print("El formulario tiene errores");
@@ -360,8 +392,13 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
 
   String validateNombre(String value) {
     String pattern = r'(^[a-zA-Z ]*$)';
+//  String pattern = r'(^([A-Z]{1}[a-z]+[ ]?){1,2}$)';
     RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
+    var str = value.toString();
+    if(!regExp.hasMatch(str)){
+      return "El nombre no es permitido";
+    }
+    else if (value.length == 0) {
       return "El nombre es requerido.";
     }
 //    else if (!regExp.hasMatch(value)) {
@@ -370,13 +407,18 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     return null;
   }
 
-  String validateCI(String value) {
-    String patttern = r'(^[0-9]*$)';
+   String validateCI(String value) {
+//    String patttern = r'(^[0-9]{7,8}[LP|CB|SC|PO|PT|TJ|BN|OR|PD|CH]$)';
+    String patttern = r'(^[0-9]{7,8}$)';
     RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
+    var str = value.toString();
+    if(!regExp.hasMatch(str)){
+      return "CI ejemplo: 6717765";
+    }
+    else if (value.length == 0) {
       return "El número de CI es requerido.";
     }
-    else if (value.length<7) {
+    else if (value.length<7 || value.length>10) {
       return "El número de CI debe tener al menos 7 digitos";
     }
     return null;
@@ -401,10 +443,23 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     return null;
   }
 
+  String validateExtCi(String value) {
+    if (value==null) {
+      return "Seleccione una opción.";
+    }
+    return null;
+  }
+
   String validateTelefonoCelular(String value) {
-    String patttern = r'(^[0-9]*$)';
+    //String patttern = r'(^[0-9]*$)';
+    //RegExp regExp = new RegExp(patttern);
+    String patttern = r'(^[0-9]+$)';
     RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
+    var str = value.toString();
+    if(!regExp.hasMatch(str)){
+      return "El telefono tiene que ser solo número";
+    }
+    else if (value.length == 0) {
       return "El teléfono es requerido.";
     } else if (value.length < 5 ) {
       return "El numero debe tener al menos 5 dígitos";
@@ -429,6 +484,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
     if (keyForm.currentState.validate()) {
       print("Nombre ${nombreCtrl.text}");
       print("CI ${ciCtrl.text}");
+      print("ExtCi ${menuExtensionCi}");
       print("FechaNacimiento ${fechaNacimientoCtrl.text}");
       print("CiudadResidencia ${ciudadResienciaCtrl.text}");
       print("TelefonoCelular ${telefonoCelularCtrl.text}");

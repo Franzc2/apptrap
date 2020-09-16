@@ -58,7 +58,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     super.initState();
 
 
-
+//estados de las notificaciones
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         _showNotification(message);
@@ -76,7 +76,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
 //        _navigateToItemDetail(message);
       },
     );
-
+////fin estados notificaicnes
     initializationSettingsAndroid =
     new AndroidInitializationSettings('app_icon');
     initializationSettingsIOS = new IOSInitializationSettings(
@@ -96,30 +96,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
       debugPrint('Notification payload: $payload');
     }
     Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatsUserPage()));
-//    await Navigator.push(context,
-//        new MaterialPageRoute(builder: (context) => new SecondRoute()));
   }
-
-//  Future onDidReceiveLocalNotification(
-//      int id, String title, String body, String payload) async {
-//    await showDialog(
-//        context: context,
-//        builder: (BuildContext context) => CupertinoAlertDialog(
-//          title: Text(title),
-//          content: Text(body),
-//          actions: <Widget>[
-//            CupertinoDialogAction(
-//              isDefaultAction: true,
-//              child: Text('Ok'),
-//              onPressed: () async {
-//                Navigator.of(context, rootNavigator: true).pop();
-////                await Navigator.push(context,
-////                    MaterialPageRoute(builder: (context) => SecondRoute()));
-//              },
-//            )
-//          ],
-//        ));
-//  }
 
   @override
   void dispose() {
