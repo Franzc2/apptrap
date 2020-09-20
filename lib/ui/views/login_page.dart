@@ -30,7 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final Style01=TextStyle(color: Colors.black38);
     final loginState= Provider.of<LoginState>(context);
-
     // TODO: implement build
     return
       new Scaffold(

@@ -21,8 +21,10 @@ enum LoginProvider{
 }
 
 class LoginState with ChangeNotifier{
+  // definicion las instaccion de google y redes sociales segun la documentacion
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FacebookLogin _facebookSignIn= FacebookLogin();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   SharedPreferences _prefs;
   final crudModel userCrud=new crudModel();
@@ -36,9 +38,9 @@ class LoginState with ChangeNotifier{
   User user=new User(urlImagePerfil: '',nombreCompleto: '',correoElectronico: '',id: '');
   List<ExpProfesional> _expProfUser=[];
   List<Formacion> _formacionUser=[];
-
   FirebaseUser _user;
-  bool _loggedIn = false;
+
+  bool _loggedIn = false; // variable para verificar si estamos logueado o no
   bool _loading = false;
 
   LoginState(){
@@ -71,7 +73,6 @@ class LoginState with ChangeNotifier{
         _user =await _handleTwitterSignIn().catchError((e){ print(e); _loading=false;});
         break;
     }
-
     /// condicion para user logueado
     _loading = false;
     if(_user != null){
@@ -93,7 +94,6 @@ class LoginState with ChangeNotifier{
     _twitterLogin.logOut();
     _loggedIn=false;
     limpiarUser();
-
     notifyListeners();
   }
 
@@ -115,7 +115,6 @@ class LoginState with ChangeNotifier{
 
     _expProfUser=[];
     _formacionUser=[];
-
   }
 
   Future<void> cargarDatosUser(String idUser)async{
@@ -126,9 +125,10 @@ class LoginState with ChangeNotifier{
       await registrarUser(idUser);
     }
     else{
+      print('el usuario ya esta registrado en la base de datos.');
+
       _expProfUser= await userCrud.getExperienceProfUser(idUser);
       _formacionUser= await userCrud.getFormacionUser(idUser);
-      print('el usuario ya esta registrado en la base de datos.');
     }
     notifyListeners();
   }
@@ -147,8 +147,6 @@ class LoginState with ChangeNotifier{
     _formacionUser= await userCrud.getFormacionUser(idUser);
     notifyListeners();
   }
-
-
 
   registrarUser(String id)async{
     await userCrud.addUser(
@@ -172,7 +170,7 @@ class LoginState with ChangeNotifier{
     user=await userCrud.getUserById(id);
     notifyListeners();
   }
-
+  /// Credencial de GOOGLE
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -205,7 +203,7 @@ class LoginState with ChangeNotifier{
     print("correo"+ user.email);
     return user;
   }
-  //obtenemos el credencial TWITTER
+  /// obtenemos el credencial TWITTER
   Future<FirebaseUser> _handleTwitterSignIn() async{
     var twiterResult = await _twitterLogin.authorize(); // maneja toda la logica para menejar el usuario
     if(twiterResult.status != TwitterLoginStatus.loggedIn){
@@ -222,7 +220,7 @@ class LoginState with ChangeNotifier{
     print("signed in " + user.displayName);
     return user;
   }
-  /// fin de future Twitter
+  /// fin future Twitter
 
   void loginState()async{
     _loading=true;

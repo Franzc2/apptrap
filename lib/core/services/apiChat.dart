@@ -21,6 +21,7 @@ class ApiChat{
     return ref.document(idChat).collection('mensajes').orderBy('fechaMensaje',descending: true).snapshots();
   }
 
+  /// Cada vez que ingresamos a un chat llama a la funcion para vaciarlo
   Stream<QuerySnapshot> streamMensajesChat1(String idUser,String idChat){
     operacionesStreamMensajesChat1(idUser, idChat);
     return ref.document(idChat).collection('mensajes').orderBy('fechaMensaje',descending: true).snapshots();
@@ -46,7 +47,7 @@ class ApiChat{
     chat.fechaUltimoMensaje=mensaje.fechaMensaje;
     updateChat(chat.toJson(), chat.id);
   }
-
+  // sirve para vaciar el conteo de chat.
   void operacionesStreamMensajesChat1(String idUser,String idChat)async{
     var doc= await getCharById(idChat);
     Chat chat=Chat.fromMap(doc.data, doc.documentID);

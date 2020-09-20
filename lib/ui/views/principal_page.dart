@@ -29,7 +29,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
   var initializationSettingsAndroid;
   var initializationSettingsIOS;
   var initializationSettings;
-
+  // Notificaciones locales
   void _showNotification(Map<String, dynamic> message) async {
     await _demoNotification(message);
   }
@@ -40,7 +40,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
         importance: Importance.Max,
         priority: Priority.High,
         enableVibration: true,
-
 //        category: ,
         ticker: 'test ticker');
 
@@ -57,39 +56,34 @@ class _PrincipalPageState extends State<PrincipalPage> {
   void initState() {
     super.initState();
 
-
 //estados de las notificaciones
     _firebaseMessaging.configure(
+      /// es cuando la aplicacion esta en primer plano
       onMessage: (Map<String, dynamic> message) async {
-        _showNotification(message);
+        _showNotification(message); //funcion para mostrar notificacion local
         print("onMessage: $message");
-//        _showItemDialog(message);
       },
+      /// es cuando cuando esta en segundo plano
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatsUserPage()));
-//        _navigateToItemDetail(message);
       },
+      ///
       onResume: (Map<String, dynamic> message) async {
         print("onResume: $message");
         Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatsUserPage()));
-//        _navigateToItemDetail(message);
       },
     );
 ////fin estados notificaicnes
     initializationSettingsAndroid =
     new AndroidInitializationSettings('app_icon');
     initializationSettingsIOS = new IOSInitializationSettings(
-//        onDidReceiveLocalNotification: onDidReceiveLocalNotification
     );
     initializationSettings = new InitializationSettings(
-//        initializationSettingsAndroid, initializationSettingsIOS);
         initializationSettingsAndroid,initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
-
   }
-
 
   Future onSelectNotification(String payload) async {
     if (payload != null) {
@@ -121,7 +115,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
           if(state.isLoggedIn()){
             return HomePage();
           }else{
-//            return OnboardingPage();
             return LoginPage();
           }
         }

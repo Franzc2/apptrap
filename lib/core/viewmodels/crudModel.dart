@@ -18,12 +18,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class crudModel extends ChangeNotifier{
+  // Inyectamos los servicios y modelos
   ApiUser _api= locator<ApiUser>();
   ApiCategoriaPublicacion _apiCategoriaPublicacon= locator<ApiCategoriaPublicacion>();
   ApiChat _apiChat=locator<ApiChat>();
-
+  //
   List<User> users;
-  List<ExpProfesional> expProfUser;
+  List<ExpProfesional> expProfUser  ;
   List<Formacion> formacionUser;
   List<Categoria> categorias;
   List<PublicacionTrabajoUser> publicacionesUser;
@@ -50,8 +51,6 @@ class crudModel extends ChangeNotifier{
     }
     else{ return null; }
   }
-
-
 
   Future removeProduct(String id) async{
     await _api.removeDocument(id) ;
@@ -183,7 +182,6 @@ class crudModel extends ChangeNotifier{
     return ;
   }
 
-
   Future editPropuestaPostulante(String idDocUserCollection,String idDocPublicacionTrabajo,String idDocPropuestaPostulante, PropuestaPostulante data,String idUserPostulante )async{
     var result =await _api.updateDocumentInSubCollection2PropuestaPostulante(
         idDocUserCollection,
@@ -221,7 +219,6 @@ class crudModel extends ChangeNotifier{
   }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
-
   Future<Chat> getChat(String idUser,String idOtroUser) async {
     var doc = await _apiChat.getChat(idUser, idOtroUser);
     if(doc==null){

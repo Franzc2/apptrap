@@ -13,7 +13,7 @@ class ApiUser{
   final String path;
   CollectionReference ref;
 
-  ApiUser( this.path){
+  ApiUser( this.path){ //desde el locator (users)
     ref = _db.collection(path);
   }
 
@@ -45,27 +45,34 @@ class ApiUser{
   Stream<QuerySnapshot> streamDataSubCollection(String idDocCollection,String nameSubCollection){
     return ref.document(idDocCollection).collection(nameSubCollection).snapshots();
   }
+
   Future<QuerySnapshot> getDataSubCollection(String idDocCollection, String nameSubCollection) {
     return ref.document(idDocCollection).collection(nameSubCollection).orderBy('fechaCreacion',descending: true).getDocuments() ;
   }
+
   Future<DocumentSnapshot> getDocumentFromSubCollectionById(String idDocCollection,String nameSubCollection, String idDocSubCollection) {
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).get();
   }
+
   Future<DocumentReference> addDocumentInSubCollection(String idDocCollection, String nameSubCollection, Map data) {
     return ref.document(idDocCollection).collection(nameSubCollection).add(data);
   }
+
   Future<void> addDocumentInSubCollectionWithID(String idDocCollection, String nameSubCollection, Map data,String id) {
     return ref.document(idDocCollection).collection(nameSubCollection).document(id).setData(data);
   }
+
   Future<void> updateDocumentInSubCollection(String idDocCollection, String nameSubCollection , String idDocSubCollection,Map data ) {
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).updateData(data) ;
   }
+
   Future<void> removeDocumentFromSubCollectionById(String idDocCollection, String nameSubCollection,String idDocSubCollection){
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).delete();
   }
 //--------------------------------------------------------------------------------------------------------------
   //esta funcion es solo para publicaciones de usuarios que a la vez insertan en otra coleccion llamada "publicaciones"
   Future<void> addDocumentInSubCollectionPublication(String idDocCollection, String nameSubCollection, Map data, User dataUserPublicador) {
+
     DocumentReference refDocumentPublicacionUser=ref.document(idDocCollection).collection(nameSubCollection).document();
     String idPublicacionUser=refDocumentPublicacionUser.documentID+Timestamp.now().millisecondsSinceEpoch.toString();
     data['idUserPublicador']=idDocCollection;
@@ -73,8 +80,10 @@ class ApiUser{
     data['userPublicadorCorreoElectronico']=dataUserPublicador.correoElectronico;
     data['userPublicadorUrlImagen']=dataUserPublicador.urlImagePerfil;
     data['userPublicadorCiudadResidencia']=dataUserPublicador.ciudadRecidencia;
-    _apiPublicaconTrabajo.addDocumentPublicacion(data, idPublicacionUser);
-    return ref.document(idDocCollection).collection(nameSubCollection).document(idPublicacionUser).setData(data);
+
+    _apiPublicaconTrabajo.addDocumentPublicacion(data, idPublicacionUser); //insertar a la coleccion publicaciones (para algolia)
+
+    return ref.document(idDocCollection).collection(nameSubCollection).document(idPublicacionUser).setData(data);//insertar a la subcoleccion Publicacion trabajos de un documento user
   }
 
   Future<void> updateDocumentInSubCollectionPublication(String idDocCollection, String nameSubCollection , String idDocSubCollection,Map data ) {

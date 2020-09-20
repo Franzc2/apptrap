@@ -18,10 +18,10 @@ class CalificacionDeEmpleadoAEmpleador{
 
   CalificacionDeEmpleadoAEmpleador.fromMap(Map snapshot, String id):
       id=id ?? '',
-  idEmpleado=snapshot['idEmpleado'] ?? '',
-  idPublicacion= snapshot['idPublicacion'] ?? '',
-  fechaCreacion= snapshot['fechaCreacion'] ?? null,
-  calificacionDeEmpleado= snapshot['calificacionDeEmpleado'] ?? 0;
+      idEmpleado=snapshot['idEmpleado'] ?? '',
+      idPublicacion= snapshot['idPublicacion'] ?? '',
+      fechaCreacion= snapshot['fechaCreacion'] ?? null,
+      calificacionDeEmpleado= snapshot['calificacionDeEmpleado'] ?? 0;
 
   toJson(){
     return {

@@ -1,7 +1,6 @@
 import 'package:app/core/services/apiCategoriaPublicacion.dart';
 import 'package:app/core/services/apiChat.dart';
 import 'package:app/core/services/apiPublicacionTrabajo.dart';
-import 'package:app/core/viewmodels/login_state.dart';
 import 'package:get_it/get_it.dart';
 
 import './core/services/apiUser.dart';
@@ -15,5 +14,4 @@ void setupLocator() {
   locator.registerLazySingleton(() => ApiPublicacionTrabajo('publicaciones'));
   locator.registerLazySingleton(() => ApiChat('chats'));
   locator.registerLazySingleton(() => crudModel()) ;
-//locator.registerSingleton(() => LoginState());
 }
