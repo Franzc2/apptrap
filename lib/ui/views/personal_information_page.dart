@@ -157,7 +157,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                                        sumaCalificaciones=sumaCalificaciones+calificacion.calificacionDeEmpleado;
                                      }
                                    });
-                                   return numeroDeCalificaciones==0?Text("Empleador: Sin calificaciones") :Text("Empleado: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
+                                   return numeroDeCalificaciones==0?Text("Empleador: Sin calificaciones") :Text("Empleador: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
                                  }
                                }
                            ),

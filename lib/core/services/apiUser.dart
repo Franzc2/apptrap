@@ -48,6 +48,9 @@ class ApiUser{
   Future<QuerySnapshot> getDataSubCollection(String idDocCollection, String nameSubCollection) {
     return ref.document(idDocCollection).collection(nameSubCollection).orderBy('fechaCreacion',descending: true).getDocuments() ;
   }
+  Future<QuerySnapshot> getDataSubCollectionPublicacionesUser(String idDocCollection, String nameSubCollection) {
+    return ref.document(idDocCollection).collection(nameSubCollection).where("nivelImportancia",isGreaterThan: 0).orderBy('fechaCreacion',descending: true).getDocuments() ;
+  }
   Future<DocumentSnapshot> getDocumentFromSubCollectionById(String idDocCollection,String nameSubCollection, String idDocSubCollection) {
     return ref.document(idDocCollection).collection(nameSubCollection).document(idDocSubCollection).get();
   }

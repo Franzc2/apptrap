@@ -27,6 +27,7 @@ class _SearchCategoriesPageState extends State<SearchCategoriesPage> {
 
 
   _search() async {
+
     setState(() {_searching = true;});
 
     Algolia algolia = Algolia.init(

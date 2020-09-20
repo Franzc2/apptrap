@@ -6,6 +6,7 @@ import 'package:app/core/models/publicacionTrabajoAlgoliaModel.dart';
 import 'package:app/core/models/publicacionTrabajoUserModel.dart';
 import 'package:app/ui/views/curriculum_page.dart';
 import 'package:app/ui/views/search_publications_by_categories_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -36,6 +37,9 @@ class _HomePageState extends State<HomePage> {
 
 
   _search() async {
+    var fechahoySeconds=Timestamp.now().seconds;
+    print('hoy: '+fechahoySeconds.toString());
+
     setState(() {_searching = true;});
 
     Algolia algolia = Algolia.init(
@@ -44,6 +48,8 @@ class _HomePageState extends State<HomePage> {
     );
     AlgoliaQuery query = algolia.instance.index('publicaciones');
     query=query.setFilters("nivelImportancia>1");
+//    query = query.setFacetFilter('nombreCategoria<='+fechahoySeconds.toString());
+//    query=query.setFilters("");
     _results = (await query.getObjects()).hits;
     setState(() {_searching = false;});
   }
@@ -147,6 +153,11 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.refresh), onPressed: (){setState(() {
+              _search();
+            });})
+          ],
           centerTitle: true,
         ),
         body: Container(
@@ -250,7 +261,8 @@ class _HomePageState extends State<HomePage> {
                         child:
                         Container(
                           child: Center(
-                            child: Text(publicacion.nombreCategoria,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),textAlign: TextAlign.center,maxLines: 2,),
+//                            child: Text(publicacion.nombreCategoria,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),textAlign: TextAlign.center,maxLines: 2,),
+                            child: Text(DateTime.fromMillisecondsSinceEpoch(publicacion.fechaLimite.seconds*1000).toString(),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),textAlign: TextAlign.center,maxLines: 2,),
                           ),
                           height: 40,
                           color: Colors.black54,

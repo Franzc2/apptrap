@@ -140,11 +140,17 @@ class crudModel extends ChangeNotifier{
   }
 
   Future<List<PublicacionTrabajoUser>> getPublicacionesUser(String idDocUserCollection)async{
-    var result= await _api.getDataSubCollection(idDocUserCollection, 'publicaciones_trabajos').catchError((e)=>print(e));
-    publicacionesUser=result.documents
-        .map((doc) => PublicacionTrabajoUser.fromMap(doc.data, doc.documentID))
-        .toList();
-    return publicacionesUser;
+    var result= await _api.getDataSubCollectionPublicacionesUser(idDocUserCollection, 'publicaciones_trabajos').catchError((e)=>print(e));
+    if(result==null){
+      return [];
+    }
+    else{
+      publicacionesUser=result.documents
+          .map((doc) => PublicacionTrabajoUser.fromMap(doc.data, doc.documentID))
+          .toList();
+      return publicacionesUser;
+    }
+
   }
 
   Future<PublicacionTrabajoUser> getPublicacionTrabajoById(String idDocUserCollection, String idDocPublicacionTrabajo) async {
