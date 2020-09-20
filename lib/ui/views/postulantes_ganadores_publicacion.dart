@@ -210,7 +210,6 @@ class _CalificacionDialogState extends State<CalificacionDialog> {
     return AlertDialog(
       title: Text(widget.userPostulante.nombreCompleto),
       content: Container(
-        width:300,height:300,
         child: ListView(
           children: <Widget>[
             Text('Calificación'),
@@ -230,7 +229,7 @@ class _CalificacionDialogState extends State<CalificacionDialog> {
             Text(_labelCalificacion.toString()+"/10",textAlign: TextAlign.center,)
           ],
         ),
-       // height: 90,
+        height: 90,
       ),
       actions: <Widget>[
         RaisedButton(

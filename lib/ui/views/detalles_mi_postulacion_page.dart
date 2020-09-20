@@ -123,7 +123,7 @@ class _DetallesMiPostulacionPageState extends State<DetallesMiPostulacionPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                        child: widget.propuestaPostulante.calificacionAEmpleador==0?
+                        child: widget.propuestaPostulante.estadoPostulacion=="1"&& widget.propuestaPostulante.calificacionAEmpleador==0?
                         RaisedButton.icon(
                           onPressed: (){
                             _showDialogCalificar(widget.propuestaPostulante);
