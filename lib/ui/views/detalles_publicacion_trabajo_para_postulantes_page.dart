@@ -130,94 +130,171 @@ class _DetallesPublicacionTrabajoParaPostulantesPageState extends State<Detalles
                         Divider(),
                         Card(
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(top: 10.0,right: 10.0, left: 10.0),
                                 child: Text("PUBLICADO POR",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo),),
                               ),
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    child: CircleAvatar(
-                                      radius: 30.0,
-                                      child: ClipOval( child: Image.network(userPublicador.urlImagePerfil,width: 60,height: 60,fit: BoxFit.cover,),
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.all(10.0),
+                              ListTile(
+                                leading: CircleAvatar(
+                                  radius: 30.0,
+                                  child: ClipOval( child: Image.network(userPublicador.urlImagePerfil,width: 60,height: 60,fit: BoxFit.cover,),
                                   ),
-                                  Column(
-                                    children: <Widget>[
-                                      Text(' '+userPublicador.nombreCompleto,style: TextStyle(fontSize: 16,color: Color.fromRGBO(33, 33, 33, 1)),),
-                                      Row(
-                                        children: <Widget>[
-                                          Icon(Icons.location_on,color: Colors.black38,),
-                                          Text(userPublicador.ciudadRecidencia)
-                                        ],
-                                      ),
-                                      FutureBuilder(
-                                          future: _crud.getCalificacionesAEmpleador(userPublicador.id),
-                                          builder: (context, calificacionesAEmpleadorSnap){
-                                            if(calificacionesAEmpleadorSnap.connectionState==ConnectionState.waiting){
-                                              return Center(
-                                                child: Text("Cargando..."),
-                                              );
-                                            }
-                                            else{
-                                              calificacionesAEmpleador=calificacionesAEmpleadorSnap.data;
-                                              num numeroDeCalificaciones=0;
-                                              num sumaCalificaciones=0;
-                                              calificacionesAEmpleador.asMap().forEach(( i, calificacion){
-                                                if(calificacion.calificacionDeEmpleado !=0 ){
-                                                  numeroDeCalificaciones++;
-                                                  sumaCalificaciones=sumaCalificaciones+calificacion.calificacionDeEmpleado;
-                                                }
-                                              });
-                                              return numeroDeCalificaciones==0?Text("  Calificación de empleador: Sin calificaciones") :Text("  Calificación de empleador: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
-                                            }
+                                ),
+                                title: Text(' '+userPublicador.nombreCompleto,style: TextStyle(fontSize: 16,color: Color.fromRGBO(33, 33, 33, 1)),),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Icon(Icons.location_on,color: Colors.black38,),
+                                        Text(userPublicador.ciudadRecidencia),
+                                      ],
+                                    ),
+                                    FutureBuilder(
+                                        future: _crud.getCalificacionesAEmpleador(userPublicador.id),
+                                        builder: (context, calificacionesAEmpleadorSnap){
+                                          if(calificacionesAEmpleadorSnap.connectionState==ConnectionState.waiting){
+                                            return Center(
+                                              child: Text("Cargando..."),
+                                            );
                                           }
-                                      ),
-                                    ],
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                  ),
-                                  Expanded(child: infoUser.id==userPublicador.id?
-                                      Container():
-                                  Container(
-                                    child: Container(
-                                      child: IconButton(
-                                          icon: Icon(Icons.message,size: 30,color: Colors.green,),
-                                          onPressed: ()async{
-                                            if(_cargandoChat==true){
-                                              print("esta cargando");
-                                            }else{
-                                              _cargandoChat=true;
-                                              print(infoUser.id);
-                                              print(userPublicador.id);
-                                              Chat chat=await _crud.getChat(infoUser.id, userPublicador.id);
-                                              _cargandoChat=false;
-                                              if(chat==null){
-                                                print("no existe un chat algo esta mal se supone que se tenia que registrar");
-                                              }else{
-                                                print("chat: "+chat.toString());
-                                                _cargandoChat? null
-                                                    :infoUser.token==""?
-                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,))):
-                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatPage(otroUser: userPublicador,chat: chat,)));
+                                          else{
+                                            calificacionesAEmpleador=calificacionesAEmpleadorSnap.data;
+                                            num numeroDeCalificaciones=0;
+                                            num sumaCalificaciones=0;
+                                            calificacionesAEmpleador.asMap().forEach(( i, calificacion){
+                                              if(calificacion.calificacionDeEmpleado !=0 ){
+                                                numeroDeCalificaciones++;
+                                                sumaCalificaciones=sumaCalificaciones+calificacion.calificacionDeEmpleado;
                                               }
-                                            }
-                                          },
-                                          ),
-                                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                      alignment: Alignment.centerRight,
+                                            });
+                                            return numeroDeCalificaciones==0?Text("Calificación de empleador: Sin calificaciones") :Text("  Calificación de empleador: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
+                                          }
+                                        }
                                     ),
-                                  )
-                                  )
-
-                                ],
-                              ),
+                                  ],
+                                ),
+                                trailing: infoUser.id==userPublicador.id? null:
+                                IconButton(
+                                  icon: Icon(Icons.message,size: 30,color: Colors.green,),
+                                  onPressed: ()async{
+                                    if(_cargandoChat==true){
+                                      print("esta cargando");
+                                    }else{
+                                      _cargandoChat=true;
+                                      print(infoUser.id);
+                                      print(userPublicador.id);
+                                      Chat chat=await _crud.getChat(infoUser.id, userPublicador.id);
+                                      _cargandoChat=false;
+                                      if(chat==null){
+                                        print("no existe un chat algo esta mal se supone que se tenia que registrar");
+                                      }else{
+                                        print("chat: "+chat.toString());
+                                        _cargandoChat? null
+                                            :infoUser.token==""?
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,))):
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatPage(otroUser: userPublicador,chat: chat,)));
+                                      }
+                                    }
+                                  },
+                                ),
+                              )
                             ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
                           ),
                         ),
+//                        Card(
+//                          child: Column(
+//                            children: <Widget>[
+//                              Padding(
+//                                padding: const EdgeInsets.only(top: 10.0,right: 10.0, left: 10.0),
+//                                child: Text("PUBLICADO POR",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.indigo),),
+//                              ),
+//                              Row(
+//                                children: <Widget>[
+//                                  Container(
+//                                    child: CircleAvatar(
+//                                      radius: 30.0,
+//                                      child: ClipOval( child: Image.network(userPublicador.urlImagePerfil,width: 60,height: 60,fit: BoxFit.cover,),
+//                                      ),
+//                                    ),
+//                                    padding: EdgeInsets.all(10.0),
+//                                  ),
+//                                  Column(
+//                                    children: <Widget>[
+//                                      Text(' '+userPublicador.nombreCompleto,style: TextStyle(fontSize: 16,color: Color.fromRGBO(33, 33, 33, 1)),),
+//                                      Row(
+//                                        children: <Widget>[
+//                                          Icon(Icons.location_on,color: Colors.black38,),
+//                                          Text(userPublicador.ciudadRecidencia)
+//                                        ],
+//                                      ),
+//                                      FutureBuilder(
+//                                          future: _crud.getCalificacionesAEmpleador(userPublicador.id),
+//                                          builder: (context, calificacionesAEmpleadorSnap){
+//                                            if(calificacionesAEmpleadorSnap.connectionState==ConnectionState.waiting){
+//                                              return Center(
+//                                                child: Text("Cargando..."),
+//                                              );
+//                                            }
+//                                            else{
+//                                              calificacionesAEmpleador=calificacionesAEmpleadorSnap.data;
+//                                              num numeroDeCalificaciones=0;
+//                                              num sumaCalificaciones=0;
+//                                              calificacionesAEmpleador.asMap().forEach(( i, calificacion){
+//                                                if(calificacion.calificacionDeEmpleado !=0 ){
+//                                                  numeroDeCalificaciones++;
+//                                                  sumaCalificaciones=sumaCalificaciones+calificacion.calificacionDeEmpleado;
+//                                                }
+//                                              });
+//                                              return numeroDeCalificaciones==0?Text(" Calificación de empleador: Sin calificaciones") :Text("  Calificación de empleador: "+(sumaCalificaciones/numeroDeCalificaciones).toString()+"/10");
+//                                            }
+//                                          }
+//                                      ),
+//                                    ],
+//                                    crossAxisAlignment: CrossAxisAlignment.start,
+//                                  ),
+//                                  Expanded(
+//                                      child: infoUser.id==userPublicador.id?
+//                                      Container():
+//                                  Container(
+//                                    child: Container(
+//                                      child: IconButton(
+//                                          icon: Icon(Icons.message,size: 30,color: Colors.green,),
+//                                          onPressed: ()async{
+//                                            if(_cargandoChat==true){
+//                                              print("esta cargando");
+//                                            }else{
+//                                              _cargandoChat=true;
+//                                              print(infoUser.id);
+//                                              print(userPublicador.id);
+//                                              Chat chat=await _crud.getChat(infoUser.id, userPublicador.id);
+//                                              _cargandoChat=false;
+//                                              if(chat==null){
+//                                                print("no existe un chat algo esta mal se supone que se tenia que registrar");
+//                                              }else{
+//                                                print("chat: "+chat.toString());
+//                                                _cargandoChat? null
+//                                                    :infoUser.token==""?
+//                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PersonalInformationPage(user: infoUser,))):
+//                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatPage(otroUser: userPublicador,chat: chat,)));
+//                                              }
+//                                            }
+//                                          },
+//                                          ),
+//                                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+//                                      alignment: Alignment.centerRight,
+//                                    ),
+//                                  )
+//                                  )
+//
+//                                ],
+//                              ),
+//                            ],
+//                            crossAxisAlignment: CrossAxisAlignment.start,
+//                          ),
+//                        ),
                         Card(
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
