@@ -71,7 +71,7 @@ class _CurriculumPageState extends State<CurriculumPage> {
     final infoUser=Provider.of<LoginState>(context).infoUser();
     final List<ExpProfesional> expProfUser=Provider.of<LoginState>(context).expProfUser();
     final List<Formacion> formacionUser=Provider.of<LoginState>(context).formacionUser();
-
+    ///ABRIR PDF
     void abrirPdf(String url, String namePDF)async{
       File fl= await createFileOfPdfUrl(url);
       String pathpdf=fl.path;

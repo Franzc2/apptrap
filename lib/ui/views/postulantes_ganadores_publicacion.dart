@@ -229,7 +229,8 @@ class _CalificacionDialogState extends State<CalificacionDialog> {
             Text(_labelCalificacion.toString()+"/10",textAlign: TextAlign.center,)
           ],
         ),
-        height: 90,
+        height: 300,
+        width: 300,
       ),
       actions: <Widget>[
         RaisedButton(

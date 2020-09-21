@@ -400,7 +400,8 @@ class _CalificacionAEmpleadorDialogState extends State<CalificacionAEmpleadorDia
             Text(_labelCalificacion.toString()+"/10",textAlign: TextAlign.center,)
           ],
         ),
-        height: 90,
+        height: 300,
+        width: 300,
       ),
       actions: <Widget>[
         RaisedButton(

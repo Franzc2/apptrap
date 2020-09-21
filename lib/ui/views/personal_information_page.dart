@@ -242,7 +242,7 @@ class _PersonalInformationPageState extends State<PersonalInformationPage> {
                 ),
                 controller: ciCtrl,
                 validator: validateCI,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.phone,
               ),
               SizedBox(height: 15,),
               DropdownButtonFormField<String>(
