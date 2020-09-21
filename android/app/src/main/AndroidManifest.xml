@@ -43,7 +43,7 @@
             android:value="2" />
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDomzIC_a4v6n0nkMeYf0vnlRbJlMhlhHs"/>
+            android:value="Tiene que tener su propia apiKey"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
